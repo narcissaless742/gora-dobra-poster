@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 180" fill="none">
+  <!-- 2-6 girl: stubby proportions, pigtails with yellow bows -->
+  <!-- Head: big -->
+  <circle cx="60" cy="55" r="28" fill="#1A2B4A"/>
+  <!-- Pigtail hair -->
+  <path d="M 32 60 Q 30 72 36 76 L 44 72 Q 40 55 36 45 Z" fill="#1A2B4A"/>
+  <path d="M 88 60 Q 90 72 84 76 L 76 72 Q 80 55 84 45 Z" fill="#1A2B4A"/>
+  <!-- Yellow bows on pigtails -->
+  <circle cx="32" cy="45" r="5" fill="#FFD93D" stroke="#1A2B4A" stroke-width="1.5"/>
+  <circle cx="88" cy="45" r="5" fill="#FFD93D" stroke="#1A2B4A" stroke-width="1.5"/>
+  <!-- Body: short dress-like -->
+  <path d="M 40 82 L 80 82 L 90 137 L 30 137 Z" fill="#1A2B4A"/>
+  <!-- Legs -->
+  <rect x="45" y="137" width="13" height="33" rx="4" fill="#1A2B4A"/>
+  <rect x="62" y="137" width="13" height="33" rx="4" fill="#1A2B4A"/>
+</svg>

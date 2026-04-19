@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 180" fill="none">
+  <!-- 11-14 girl: taller, long hair, holding a book -->
+  <!-- Head -->
+  <circle cx="55" cy="32" r="20" fill="#1A2B4A"/>
+  <!-- Long hair -->
+  <path d="M 35 30 Q 38 14 55 12 Q 72 14 75 30 L 78 70 Q 75 74 72 72 L 70 45 L 68 50 L 42 50 L 40 45 L 38 72 Q 35 74 32 70 Z" fill="#1A2B4A"/>
+  <!-- Yellow hair tie/clip -->
+  <circle cx="55" cy="18" r="3" fill="#FFD93D" stroke="#1A2B4A" stroke-width="1.5"/>
+  <!-- Body (dress/top) -->
+  <path d="M 40 52 L 70 52 L 76 124 L 34 124 Z" fill="#1A2B4A"/>
+  <!-- Arm + book -->
+  <rect x="70" y="72" width="9" height="30" rx="3" fill="#1A2B4A"/>
+  <rect x="75" y="92" width="20" height="15" fill="#FFD93D" stroke="#1A2B4A" stroke-width="2"/>
+  <line x1="85" y1="92" x2="85" y2="107" stroke="#1A2B4A" stroke-width="1.5"/>
+  <!-- Legs -->
+  <rect x="43" y="124" width="13" height="50" rx="4" fill="#1A2B4A"/>
+  <rect x="61" y="124" width="13" height="50" rx="4" fill="#1A2B4A"/>
+</svg>

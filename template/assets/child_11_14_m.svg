@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 180" fill="none">
+  <!-- 11-14 boy: taller, holding a book -->
+  <!-- Head -->
+  <circle cx="55" cy="32" r="20" fill="#1A2B4A"/>
+  <!-- Hair -->
+  <path d="M 37 30 Q 40 15 55 13 Q 70 15 73 30 Z" fill="#1A2B4A"/>
+  <!-- Body -->
+  <rect x="36" y="52" width="44" height="72" rx="7" fill="#1A2B4A"/>
+  <!-- Arm holding book -->
+  <rect x="76" y="70" width="10" height="35" rx="4" fill="#1A2B4A"/>
+  <!-- Book (yellow accent) -->
+  <rect x="82" y="95" width="22" height="16" fill="#FFD93D" stroke="#1A2B4A" stroke-width="2"/>
+  <line x1="93" y1="95" x2="93" y2="111" stroke="#1A2B4A" stroke-width="1.5"/>
+  <!-- Legs -->
+  <rect x="42" y="124" width="14" height="50" rx="4" fill="#1A2B4A"/>
+  <rect x="62" y="124" width="14" height="50" rx="4" fill="#1A2B4A"/>
+</svg>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 180" fill="none">
+  <!-- 7-10 boy: school age, backpack, short hair -->
+  <!-- Head -->
+  <circle cx="60" cy="40" r="22" fill="#1A2B4A"/>
+  <!-- Hair cap -->
+  <path d="M 40 38 Q 42 22 60 20 Q 78 22 80 38 Z" fill="#1A2B4A"/>
+  <!-- Body -->
+  <rect x="38" y="62" width="44" height="65" rx="8" fill="#1A2B4A"/>
+  <!-- Backpack strap (yellow) -->
+  <rect x="40" y="63" width="4" height="55" fill="#FFD93D"/>
+  <rect x="76" y="63" width="4" height="55" fill="#FFD93D"/>
+  <!-- Legs -->
+  <rect x="43" y="127" width="14" height="45" rx="4" fill="#1A2B4A"/>
+  <rect x="63" y="127" width="14" height="45" rx="4" fill="#1A2B4A"/>
+</svg>

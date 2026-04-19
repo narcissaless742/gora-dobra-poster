@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>{{ name_ua }} — Патронаж / Patenschaft</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page" data-items="{{ items|length }}">
+
+  <header class="topbar">
+    <div class="brand">
+      <img src="assets/brand_logo_full.png" alt="Гора Добра" class="brand-logo">
+    </div>
+    <div class="campaign-chip">
+      <span class="chip-ua">ПАТРОНАЖ</span>
+      <span class="chip-sep">·</span>
+      <span class="chip-de">PATENSCHAFT</span>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="hero-kicker">
+          <span class="kicker-ua">Допоможи дитині з діабетом</span>
+          <span class="kicker-de">Hilf einem Kind mit Diabetes</span>
+        </div>
+        <h1 class="hero-name">{{ name_ua }}</h1>
+        <div class="hero-meta">
+          <span class="hero-age">{{ age }} {{ age_word_ua }}</span>
+          <span class="meta-dot">·</span>
+          <span class="hero-location">{{ city_ua }}</span>
+        </div>
+        <div class="hero-name-alt">{{ name_de }} · {{ age }} {{ age_word_de }} · {{ city_de }}</div>
+      </div>
+      <div class="hero-illustration">
+        <img src="{{ illustration }}" alt="">
+      </div>
+    </div>
+  </section>
+
+  <section class="story">
+    <div class="col">
+      <div class="col-label">ІСТОРІЯ</div>
+      <p class="col-text">{{ story_ua }}</p>
+    </div>
+    <div class="col col-de">
+      <div class="col-label">GESCHICHTE</div>
+      <p class="col-text">{{ story_de }}</p>
+    </div>
+  </section>
+
+  <section class="needs">
+    <div class="needs-head">
+      <div class="needs-label-ua">ЩО ПОТРІБНО ЩОМІСЯЦЯ</div>
+      <div class="needs-label-de">MONATLICHER BEDARF</div>
+    </div>
+    <ul class="needs-list">
+      {% for item in items %}
+      <li>
+        <div class="item-texts">
+          <span class="item-ua">{{ item.ua }}</span>
+          <span class="item-de">{{ item.de }}</span>
+        </div>
+        {% if item.price %}<span class="item-price">{{ item.price }}&nbsp;€</span>{% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    <div class="amount">
+      <div class="amount-value">{{ amount }}&nbsp;€</div>
+      <div class="amount-label">на місяць · pro Monat</div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-main">Станьте патроном цієї дитини</div>
+    <div class="cta-alt">Werden Sie Pate für dieses Kind</div>
+    <div class="cta-contact">
+      {% if fund.website %}<span>{{ fund.website }}</span>{% endif %}
+      {% if fund.website and fund.phone %}<span class="meta-dot">·</span>{% endif %}
+      {% if fund.phone %}<span>{{ fund.phone }}</span>{% endif %}
+      {% if fund.email %}<span class="meta-dot">·</span><span>{{ fund.email }}</span>{% endif %}
+    </div>
+  </section>
+
+  <section class="partners">
+    <div class="partners-label">
+      <span class="partners-ua">Дякуємо партнерам за підтримку</span>
+      <span class="partners-de">Mit Dankbarkeit an unsere Partner</span>
+    </div>
+    <img src="assets/partners_logos.png" alt="Partners" class="partners-img">
+    <div class="ref-mark">№&nbsp;{{ ref_id }}</div>
+  </section>
+
+</div>
+</body>
+</html>

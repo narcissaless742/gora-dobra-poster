@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 180" fill="none">
+  <!-- 15-18 boy: teen, lean, hoodie with headphones -->
+  <!-- Head -->
+  <circle cx="55" cy="28" r="19" fill="#1A2B4A"/>
+  <!-- Hair -->
+  <path d="M 38 28 Q 40 12 55 10 Q 70 12 72 28 Z" fill="#1A2B4A"/>
+  <!-- Headphones (yellow accent) -->
+  <path d="M 36 30 Q 34 14 55 12 Q 76 14 74 30" stroke="#FFD93D" stroke-width="3.5" fill="none"/>
+  <circle cx="36" cy="30" r="5" fill="#FFD93D" stroke="#1A2B4A" stroke-width="1.5"/>
+  <circle cx="74" cy="30" r="5" fill="#FFD93D" stroke="#1A2B4A" stroke-width="1.5"/>
+  <!-- Hoodie body with hood -->
+  <path d="M 36 50 L 40 47 L 70 47 L 74 50 L 80 128 L 30 128 Z" fill="#1A2B4A"/>
+  <!-- Hoodie pocket line -->
+  <path d="M 40 95 L 70 95" stroke="#FFD93D" stroke-width="1.5" opacity="0.5"/>
+  <!-- Legs (longer, leaner) -->
+  <rect x="40" y="128" width="14" height="48" rx="4" fill="#1A2B4A"/>
+  <rect x="56" y="128" width="14" height="48" rx="4" fill="#1A2B4A"/>
+</svg>

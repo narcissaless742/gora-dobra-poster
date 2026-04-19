@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 180" fill="none">
+  <!-- 2-6 boy: stubby proportions, short spiky hair, small ball -->
+  <!-- Head: big -->
+  <circle cx="60" cy="55" r="28" fill="#1A2B4A"/>
+  <!-- Spiky short hair -->
+  <path d="M 38 48 Q 44 30 54 36 Q 60 28 66 36 Q 76 30 82 48 Z" fill="#1A2B4A"/>
+  <!-- Body: short, round -->
+  <rect x="34" y="82" width="52" height="55" rx="14" fill="#1A2B4A"/>
+  <!-- Legs -->
+  <rect x="42" y="135" width="15" height="35" rx="5" fill="#1A2B4A"/>
+  <rect x="63" y="135" width="15" height="35" rx="5" fill="#1A2B4A"/>
+  <!-- Ball (yellow accent) in hand -->
+  <circle cx="88" cy="118" r="12" fill="#FFD93D" stroke="#1A2B4A" stroke-width="2.5"/>
+</svg>

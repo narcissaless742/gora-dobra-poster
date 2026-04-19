@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: gora-dobra
+    runtime: docker
+    plan: free
+    region: frankfurt
+    healthCheckPath: /
+    autoDeploy: true

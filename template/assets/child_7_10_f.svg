@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 180" fill="none">
+  <!-- 7-10 girl: school age, ponytail, backpack -->
+  <!-- Head -->
+  <circle cx="60" cy="40" r="22" fill="#1A2B4A"/>
+  <!-- Hair + side ponytail -->
+  <path d="M 40 38 Q 42 22 60 20 Q 78 22 80 38 Q 84 30 88 26 Q 96 24 98 32 Q 96 42 88 44 Q 82 42 80 40 Z" fill="#1A2B4A"/>
+  <!-- Yellow hair tie -->
+  <circle cx="92" cy="30" r="3.5" fill="#FFD93D" stroke="#1A2B4A" stroke-width="1.5"/>
+  <!-- Body (dress) -->
+  <path d="M 40 62 L 80 62 L 86 127 L 34 127 Z" fill="#1A2B4A"/>
+  <!-- Backpack strap -->
+  <rect x="42" y="63" width="3.5" height="50" fill="#FFD93D"/>
+  <rect x="74.5" y="63" width="3.5" height="50" fill="#FFD93D"/>
+  <!-- Legs -->
+  <rect x="44" y="127" width="13" height="45" rx="4" fill="#1A2B4A"/>
+  <rect x="63" y="127" width="13" height="45" rx="4" fill="#1A2B4A"/>
+</svg>

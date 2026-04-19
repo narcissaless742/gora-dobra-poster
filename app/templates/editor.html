@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Гора Добра — Постер для дитини</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='editor.css') }}">
+</head>
+<body>
+
+<!-- Header -->
+<header class="app-header">
+  <div class="app-title">
+    <span class="brand-mark">ГОРА&nbsp;ДОБРА</span>
+    <span class="app-sub">Постер для дитини</span>
+  </div>
+</header>
+
+<!-- Step indicator -->
+<nav class="steps-bar" aria-label="Кроки">
+  <div class="step-dot active" data-step="1"><b>1</b><span>Про дитину</span></div>
+  <div class="step-line"></div>
+  <div class="step-dot" data-step="2"><b>2</b><span>Історія</span></div>
+  <div class="step-line"></div>
+  <div class="step-dot" data-step="3"><b>3</b><span>Потреби</span></div>
+  <div class="step-line"></div>
+  <div class="step-dot" data-step="4"><b>4</b><span>Готово</span></div>
+</nav>
+
+<!-- Steps -->
+<main class="wizard">
+
+  <!-- ========== STEP 1 ========== -->
+  <section class="page active" data-step="1">
+    <h1>Хто ця дитина?</h1>
+
+    <div class="q">
+      <label for="name_ua" class="q-label">Як звати дитину?</label>
+      <input type="text" id="name_ua" class="big-input" placeholder="Наприклад: Софія" autocomplete="off">
+      <div class="hint-translated" id="hint-name"></div>
+    </div>
+
+    <div class="q">
+      <span class="q-label">Скільки років?</span>
+      <div class="age-stepper">
+        <button type="button" class="age-btn" data-delta="-1" aria-label="Менше">−</button>
+        <input type="number" id="age" value="8" min="1" max="18" inputmode="numeric">
+        <button type="button" class="age-btn" data-delta="1" aria-label="Більше">+</button>
+      </div>
+    </div>
+
+    <div class="q">
+      <span class="q-label">Хлопчик чи дівчинка?</span>
+      <div class="gender-picker">
+        <label class="gender-card" data-gender="f">
+          <input type="radio" name="gender" value="f" checked>
+          <img id="gender-img-f" src="/template/assets/child_7_10_f.png" alt="">
+          <span>Дівчинка</span>
+        </label>
+        <label class="gender-card" data-gender="m">
+          <input type="radio" name="gender" value="m">
+          <img id="gender-img-m" src="/template/assets/child_7_10_m.png" alt="">
+          <span>Хлопчик</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="q">
+      <label for="city_ua" class="q-label">Звідки дитина?</label>
+      <input type="text" id="city_ua" class="big-input" placeholder="Наприклад: Львів, Україна" autocomplete="off">
+      <div class="hint-translated" id="hint-city"></div>
+    </div>
+
+    <div class="nav-buttons">
+      <span></span>
+      <button type="button" class="btn-next" data-target="2">Далі →</button>
+    </div>
+  </section>
+
+  <!-- ========== STEP 2 ========== -->
+  <section class="page" data-step="2">
+    <h1>Розкажіть коротку історію</h1>
+    <p class="page-hint">Декілька речень: хто дитина, з чим живе, чим особлива.</p>
+
+    <div class="q">
+      <label for="story_ua" class="q-label">Історія українською:</label>
+      <textarea id="story_ua" class="big-textarea" rows="7" placeholder="Напишіть 3–5 речень українською. Переклад на німецьку зробимо автоматично."></textarea>
+    </div>
+
+    <div class="q translation-block">
+      <div class="q-label translation-label">
+        <span>Переклад німецькою <em>(автоматично)</em></span>
+        <span class="translation-status" id="story-status"></span>
+      </div>
+      <textarea id="story_de" class="big-textarea translation-textarea" rows="7" placeholder="Тут з'явиться переклад — можете редагувати"></textarea>
+      <button type="button" class="btn-link" id="btn-retranslate-story">🔄 Перекласти заново</button>
+    </div>
+
+    <div class="nav-buttons">
+      <button type="button" class="btn-back" data-target="1">← Назад</button>
+      <button type="button" class="btn-next" data-target="3">Далі →</button>
+    </div>
+  </section>
+
+  <!-- ========== STEP 3 ========== -->
+  <section class="page" data-step="3">
+    <h1>Що потрібно щомісяця?</h1>
+    <p class="page-hint">Від 1 до 5 пунктів. Наприклад: сенсори, пластирі, голки.</p>
+
+    <div class="q">
+      <div id="items-list" class="items"></div>
+      <button type="button" id="btn-add-item" class="btn-add">+ Додати пункт</button>
+    </div>
+
+    <div class="q">
+      <label for="amount" class="q-label">
+        Разом на місяць
+        <span class="q-sublabel" id="amount-mode">рахуємо автоматично з пунктів</span>
+      </label>
+      <div class="amount-wrap">
+        <input type="number" id="amount" min="0" step="5" value="0" class="big-input amount-input" inputmode="numeric">
+        <span class="currency">€</span>
+        <button type="button" id="btn-reset-amount" class="amount-reset" title="Повернути автосуму">↺</button>
+      </div>
+    </div>
+
+    <div class="nav-buttons">
+      <button type="button" class="btn-back" data-target="2">← Назад</button>
+      <button type="button" class="btn-next" data-target="4">Далі →</button>
+    </div>
+  </section>
+
+  <!-- ========== STEP 4 ========== -->
+  <section class="page" data-step="4">
+    <h1>Готово! 🎉</h1>
+    <p class="page-hint">Ось як виглядатиме ваш постер. Якщо щось не так — поверніться назад і правте.</p>
+
+    <div class="preview-wrap">
+      <iframe id="preview-frame" title="Preview"></iframe>
+    </div>
+
+    <div class="final-actions">
+      <button type="button" id="btn-pdf" class="btn-big">⬇ Завантажити PDF</button>
+      <button type="button" class="btn-back btn-big-ghost" data-target="1">← Повернутись правити</button>
+      <button type="button" id="btn-new" class="btn-link">➕ Створити постер для іншої дитини</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- Item row template -->
+<template id="item-row-template">
+  <div class="item-row">
+    <div class="item-num"></div>
+    <input type="text" class="item-ua big-input" placeholder="Наприклад: FreeStyle Libre 3 — сенсори, 2 шт">
+    <div class="item-price-wrap">
+      <input type="number" class="item-price" min="0" step="5" placeholder="0" inputmode="numeric">
+      <span class="item-price-unit">€</span>
+    </div>
+    <button type="button" class="item-remove" title="Видалити" aria-label="Видалити">✕</button>
+  </div>
+</template>
+
+<!-- Toast (translation errors etc) -->
+<div id="toast" class="toast"></div>
+
+<script src="{{ url_for('static', filename='editor.js') }}"></script>
+</body>
+</html>

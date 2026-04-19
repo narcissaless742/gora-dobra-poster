@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 200" fill="none">
+  <!-- Heart outline made of two mountain peaks -->
+  <g stroke="#1A2B4A" stroke-width="8" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Left yellow peak (large) -->
+    <path d="M 30 110 L 80 30 L 130 110 L 105 135 L 80 110 L 55 135 Z"
+          fill="#FFD93D"/>
+    <!-- Right light-blue peak (smaller, behind) -->
+    <path d="M 110 110 L 150 55 L 190 110 L 165 135 L 150 120 L 135 135 Z"
+          fill="#B7DCF5"/>
+    <!-- Heart bottom curve outline -->
+    <path d="M 30 110 C 30 150, 70 170, 110 190 C 150 170, 190 150, 190 110"/>
+  </g>
+</svg>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 180" fill="none">
+  <!-- 15-18 girl: teen, long hair, phone in hand -->
+  <!-- Head -->
+  <circle cx="55" cy="28" r="19" fill="#1A2B4A"/>
+  <!-- Long flowing hair -->
+  <path d="M 36 28 Q 38 10 55 9 Q 72 10 74 28 L 80 85 Q 78 90 74 88 L 72 42 L 70 48 L 40 48 L 38 42 L 36 88 Q 32 90 30 85 Z" fill="#1A2B4A"/>
+  <!-- Yellow earring -->
+  <circle cx="74" cy="36" r="2.5" fill="#FFD93D" stroke="#1A2B4A" stroke-width="1"/>
+  <!-- Body (top/blouse) -->
+  <path d="M 38 50 L 72 50 L 78 128 L 32 128 Z" fill="#1A2B4A"/>
+  <!-- Arm holding phone -->
+  <rect x="70" y="70" width="9" height="30" rx="3" fill="#1A2B4A"/>
+  <!-- Phone (yellow) -->
+  <rect x="72" y="92" width="14" height="22" rx="2" fill="#FFD93D" stroke="#1A2B4A" stroke-width="2"/>
+  <!-- Legs -->
+  <rect x="42" y="128" width="13" height="48" rx="4" fill="#1A2B4A"/>
+  <rect x="59" y="128" width="13" height="48" rx="4" fill="#1A2B4A"/>
+</svg>
