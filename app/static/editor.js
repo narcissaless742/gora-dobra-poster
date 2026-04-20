@@ -24,6 +24,7 @@ const state = {
   gender: 'f',
   amount: 0,
   amountManual: false,
+  brand: {},
 };
 
 /* ================================
@@ -160,12 +161,23 @@ async function autotranslateStory() {
 
 const autotranslateStoryDebounced = debounce(autotranslateStory, 800);
 
+const storyUaCounter = $('#story-ua-counter');
+const storyDeCounter = $('#story-de-counter');
+const STORY_LIMIT = 350;
+
+function updateCounter(counter, len) {
+  counter.textContent = len + ' / ' + STORY_LIMIT;
+  counter.classList.toggle('warn', len >= Math.floor(STORY_LIMIT * 0.9));
+}
+
 storyUa.addEventListener('input', (e) => {
   state.story_ua = e.target.value;
+  updateCounter(storyUaCounter, e.target.value.length);
   autotranslateStoryDebounced();
 });
 storyDe.addEventListener('input', (e) => {
   state.story_de = e.target.value;
+  updateCounter(storyDeCounter, e.target.value.length);
   storyStatus.textContent = '✎ ви редагуєте';
 });
 btnRetranslateStory.addEventListener('click', () => {
@@ -263,8 +275,8 @@ function goTo(step) {
     d.classList.toggle('active', s === step);
     d.classList.toggle('done', s < step);
   });
-  // When reaching step 4, render preview
-  if (step === 4) runPreview();
+  // When reaching step 4, render preview + social thumbnails
+  if (step === 4) { runPreview(); loadSocialPreviews(); }
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -377,6 +389,151 @@ btnNew.addEventListener('click', () => {
 });
 
 /* ================================
+   BRAND SETTINGS
+   ================================ */
+const bsCTAua   = $('#bs-cta-ua');
+const bsCTAde   = $('#bs-cta-de');
+const bsWebsite = $('#bs-website');
+const bsPhone   = $('#bs-phone');
+const bsEmail   = $('#bs-email');
+const btnSaveBrand = $('#btn-save-brand');
+
+async function loadBrandSettings() {
+  try {
+    const res = await fetch('/api/brand');
+    if (!res.ok) return;
+    const data = await res.json();
+    state.brand = data;
+    if (data.cta_ua)  bsCTAua.value   = data.cta_ua;
+    if (data.cta_de)  bsCTAde.value   = data.cta_de;
+    if (data.website) bsWebsite.value = data.website;
+    if (data.phone)   bsPhone.value   = data.phone;
+    if (data.email)   bsEmail.value   = data.email;
+  } catch (e) {
+    console.warn('Could not load brand settings:', e);
+  }
+}
+
+btnSaveBrand.addEventListener('click', async () => {
+  const payload = {
+    cta_ua:  bsCTAua.value.trim(),
+    cta_de:  bsCTAde.value.trim(),
+    website: bsWebsite.value.trim(),
+    phone:   bsPhone.value.trim(),
+    email:   bsEmail.value.trim(),
+  };
+  const orig = btnSaveBrand.textContent;
+  btnSaveBrand.disabled = true;
+  btnSaveBrand.textContent = 'Зберігаємо…';
+  try {
+    const res = await fetch('/api/brand', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error('Save failed');
+    state.brand = await res.json();
+    toast('✓ Налаштування збережено');
+  } catch (e) {
+    toast('Помилка: ' + e.message);
+  } finally {
+    btnSaveBrand.disabled = false;
+    btnSaveBrand.textContent = orig;
+  }
+});
+
+$$('.partner-upload').forEach(input => {
+  input.addEventListener('change', async (e) => {
+    const slot = e.target.dataset.slot;
+    const file = e.target.files[0];
+    if (!file) return;
+    const statusEl = $(`#partner-status-${slot}`);
+    statusEl.textContent = 'Завантажуємо…';
+    const fd = new FormData();
+    fd.append('file', file);
+    try {
+      const res = await fetch(`/api/upload/partner/${slot}`, { method: 'POST', body: fd });
+      if (!res.ok) throw new Error((await res.text()) || 'Upload failed');
+      statusEl.textContent = '✓ ' + file.name;
+      toast(`✓ Логотип ${slot} завантажено`);
+    } catch (e) {
+      statusEl.textContent = 'Помилка!';
+      toast('Помилка завантаження: ' + e.message);
+    }
+  });
+});
+
+/* ================================
+   SOCIAL PREVIEWS
+   ================================ */
+async function loadSocialPreviews() {
+  const payload = collectPayload();
+  for (const fmt of ['story', 'post1', 'post2']) {
+    const frame = document.querySelector(`.social-preview-frame[data-fmt="${fmt}"]`);
+    const wrap  = frame && frame.closest('.social-preview-wrap');
+    if (!frame) continue;
+    wrap && wrap.classList.add('loading');
+    try {
+      const res = await fetch(`/api/preview/social/${fmt}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const html = await res.text();
+      const doc = frame.contentDocument || frame.contentWindow.document;
+      doc.open(); doc.write(html); doc.close();
+    } catch (e) {
+      console.warn('Social preview failed:', fmt, e);
+    } finally {
+      wrap && wrap.classList.remove('loading');
+    }
+  }
+}
+
+/* ================================
+   SOCIAL / ZIP DOWNLOADS
+   ================================ */
+async function downloadBlob(url, payload, defaultName, btnEl) {
+  const orig = btnEl.textContent;
+  btnEl.disabled = true;
+  btnEl.textContent = 'Готуємо…';
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error('Помилка сервера');
+    const blob = await res.blob();
+    const objUrl = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = objUrl;
+    const cd = res.headers.get('Content-Disposition') || '';
+    const m = /filename="?([^";\s]+)"?/.exec(cd);
+    a.download = m ? m[1] : defaultName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(objUrl);
+    toast('✓ Завантажено: ' + a.download);
+  } catch (e) {
+    toast('Помилка: ' + e.message);
+  } finally {
+    btnEl.disabled = false;
+    btnEl.textContent = orig;
+  }
+}
+
+$('#btn-story').addEventListener('click', () =>
+  downloadBlob('/api/generate/social/story', collectPayload(), 'poster_story.png', $('#btn-story')));
+$('#btn-post1').addEventListener('click', () =>
+  downloadBlob('/api/generate/social/post1', collectPayload(), 'poster_post1.png', $('#btn-post1')));
+$('#btn-post2').addEventListener('click', () =>
+  downloadBlob('/api/generate/social/post2', collectPayload(), 'poster_post2.png', $('#btn-post2')));
+$('#btn-all').addEventListener('click', () =>
+  downloadBlob('/api/generate/all', collectPayload(), 'poster_all.zip', $('#btn-all')));
+
+/* ================================
    INITIAL
    ================================ */
 function seedDefaultItems() {
@@ -391,3 +548,4 @@ renderItems();
 updateGenderPreviews();
 setAmountMode(false);
 recomputeTotal();
+loadBrandSettings();

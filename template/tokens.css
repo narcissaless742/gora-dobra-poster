@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Manrope:wght@400;500;600;700&display=swap');
+
+:root {
+  --yellow:      #FCF859;
+  --yellow-soft: #FFFED7;
+  --blue-light:  #B0D9EF;
+  --blue-mid:    #88C8F4;
+  --navy:        #141625;
+  --ink:         #141625;
+  --muted:       #717171;
+  --cream:       #FFFED7;
+  --paper:       #FFFFFF;
+  --f-display:   'Unbounded', system-ui, sans-serif;
+  --f-body:      'Manrope', system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; padding: 0; }
+
+html, body {
+  font-family: var(--f-body);
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}

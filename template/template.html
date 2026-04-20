@@ -10,7 +10,11 @@
 
   <header class="topbar">
     <div class="brand">
-      <img src="assets/brand_logo_full.png" alt="Гора Добра" class="brand-logo">
+      <img src="assets/brand_logo_mark.png" alt="" class="brand-mark">
+      <div class="brand-name">
+        <span class="brand-name-sub">БЛАГОДІЙНИЙ ФОНД</span>
+        <span class="brand-name-main">ГОРА ДОБРА</span>
+      </div>
     </div>
     <div class="campaign-chip">
       <span class="chip-ua">ПАТРОНАЖ</span>
@@ -75,8 +79,8 @@
   </section>
 
   <section class="cta">
-    <div class="cta-main">Станьте патроном цієї дитини</div>
-    <div class="cta-alt">Werden Sie Pate für dieses Kind</div>
+    <div class="cta-main">{{ fund.cta_ua }}</div>
+    <div class="cta-alt">{{ fund.cta_de }}</div>
     <div class="cta-contact">
       {% if fund.website %}<span>{{ fund.website }}</span>{% endif %}
       {% if fund.website and fund.phone %}<span class="meta-dot">·</span>{% endif %}
@@ -87,13 +91,47 @@
 
   <section class="partners">
     <div class="partners-label">
-      <span class="partners-ua">Дякуємо партнерам за підтримку</span>
-      <span class="partners-de">Mit Dankbarkeit an unsere Partner</span>
+      <span class="partners-ua">{{ fund.partners_ua }}</span>
+      <span class="partners-de">{{ fund.partners_de }}</span>
     </div>
-    <img src="assets/partners_logos.png" alt="Partners" class="partners-img">
+    {% if partners %}
+      <div style="display:flex;align-items:center;gap:14px;width:100%;">
+        {% for p in partners %}<img src="{{ p }}" alt="" style="height:22mm;width:auto;object-fit:contain;">{% endfor %}
+      </div>
+    {% else %}
+      <img src="assets/partners_logos.png" alt="Partners" class="partners-img">
+    {% endif %}
     <div class="ref-mark">№&nbsp;{{ ref_id }}</div>
   </section>
 
 </div>
+
+<script>
+// Auto-fit hero name: shrink pt size until name fits on one line.
+(function() {
+  function fit() {
+    var name = document.querySelector('.hero-name');
+    var col  = document.querySelector('.hero-text');
+    if (!name || !col) return;
+    name.style.fontSize = '';
+    var max = col.clientWidth;
+    if (!max) return;
+    // Read computed base size, then shrink 1pt at a time down to 18pt minimum.
+    var base = parseFloat(getComputedStyle(name).fontSize);
+    var pt = base;
+    while (name.scrollWidth > max && pt > 18) {
+      pt -= 1;
+      name.style.fontSize = pt + 'px';
+    }
+  }
+  function run() { requestAnimationFrame(fit); }
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(run);
+  } else {
+    window.addEventListener('load', run);
+  }
+  window.addEventListener('resize', run);
+})();
+</script>
 </body>
 </html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>{{ name_ua }} — Пост 1</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+/* ===== POST 1 — 1080×1080 — Hero + Story + Partners ===== */
+body { background: var(--paper); }
+
+.s-page {
+  width: 1080px; height: 1080px;
+  display: flex; flex-direction: column;
+  overflow: hidden; background: var(--paper);
+}
+
+/* --- Topbar 100px --- */
+.s-topbar {
+  flex-shrink: 0; height: 100px; padding: 0 50px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 2px solid var(--navy);
+}
+.s-brand { display: flex; align-items: center; gap: 14px; }
+.s-brand-mark { height: 66px; width: auto; display: block; flex-shrink: 0; }
+.s-brand-name { display: flex; flex-direction: column; gap: 4px; line-height: 1; }
+.s-brand-name-sub {
+  font-family: var(--f-display); font-weight: 500; font-size: 11px;
+  color: var(--navy); letter-spacing: 0.14em; text-transform: uppercase;
+}
+.s-brand-name-main {
+  font-family: var(--f-display); font-weight: 900; font-size: 26px;
+  color: var(--navy); letter-spacing: 0.01em;
+}
+.s-chip {
+  background: var(--yellow); color: var(--navy);
+  padding: 8px 18px; border: 2px solid var(--navy);
+  font-family: var(--f-display); font-weight: 700; font-size: 13px;
+  letter-spacing: 0.1em; border-radius: 3px;
+}
+
+/* --- Hero 380px --- */
+.s-hero {
+  flex-shrink: 0; height: 380px; position: relative;
+  padding: 28px 0 0 50px; overflow: hidden;
+  background: linear-gradient(120deg, rgba(176,217,239,.20) 0%, rgba(252,248,89,.07) 100%);
+}
+.s-hero-content { height: 100%; position: relative; }
+.s-hero-text { width: 65%; position: relative; z-index: 2; }
+.s-hero-illustration {
+  position: absolute; right: 0; top: 0; bottom: 0; z-index: 1;
+  width: 380px; overflow: hidden;
+}
+.s-hero-illustration img {
+  position: absolute; left: -190px; top: -20px;
+  width: 760px; height: auto; display: block;
+}
+.s-kicker { display: flex; flex-direction: column; gap: 5px; margin-bottom: 18px; }
+.s-kicker-ua {
+  font-family: var(--f-body); font-weight: 600; font-size: 18px;
+  color: var(--navy); letter-spacing: 0.07em; text-transform: uppercase;
+}
+.s-kicker-de { font-size: 15px; color: var(--muted); font-style: italic; font-weight: 500; }
+.s-hero-name {
+  font-family: var(--f-display); font-weight: 900; font-size: 90px;
+  line-height: 1; color: var(--navy); letter-spacing: -0.02em;
+  white-space: nowrap; overflow: hidden;
+}
+.s-meta {
+  margin-top: 18px;
+  font-family: var(--f-display); font-weight: 700; font-size: 34px;
+  color: var(--navy); display: flex; gap: 12px; align-items: baseline;
+}
+.s-meta .dot { color: var(--blue-mid); }
+.s-name-alt { margin-top: 12px; font-weight: 500; font-size: 18px; color: var(--muted); font-style: italic; }
+
+/* --- Story flex:1 (~500px) --- */
+.s-story {
+  flex: 1; min-height: 0;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 36px; padding: 24px 50px; overflow: hidden;
+}
+.s-col-label {
+  font-family: var(--f-display); font-weight: 700; font-size: 13px;
+  color: var(--navy); letter-spacing: 0.18em;
+  margin-bottom: 10px; padding-bottom: 8px; border-bottom: 2.5px solid var(--yellow);
+}
+.s-col-text { font-size: 20px; line-height: 1.5; color: var(--ink); }
+
+/* --- Partners 175px --- */
+.s-partners {
+  flex-shrink: 0; height: 175px;
+  border-top: 2px solid var(--navy);
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 12px; padding: 14px 50px; position: relative;
+}
+.s-partners-label { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.s-partners-ua { font-family: var(--f-display); font-weight: 700; font-size: 15px; color: var(--navy); }
+.s-partners-de { font-size: 13px; color: var(--muted); font-style: italic; }
+.s-partners-logos { display: flex; align-items: center; gap: 30px; }
+.s-partners-logo { height: 78px; width: auto; max-width: 220px; object-fit: contain; display: block; }
+.s-partners-img { max-width: 750px; max-height: 78px; width: 100%; object-fit: contain; display: block; }
+.s-ref {
+  position: absolute; right: 50px; bottom: 11px;
+  font-family: var(--f-display); font-weight: 700; font-size: 12px; color: var(--muted);
+}
+</style>
+</head>
+<body>
+<div class="s-page">
+
+  <header class="s-topbar">
+    <div class="s-brand">
+      <img src="assets/brand_logo_mark.png" alt="" class="s-brand-mark">
+      <div class="s-brand-name">
+        <span class="s-brand-name-sub">БЛАГОДІЙНИЙ ФОНД</span>
+        <span class="s-brand-name-main">ГОРА ДОБРА</span>
+      </div>
+    </div>
+    <div class="s-chip">ПАТРОНАЖ&nbsp;·&nbsp;PATENSCHAFT</div>
+  </header>
+
+  <section class="s-hero">
+    <div class="s-hero-content">
+      <div class="s-hero-text">
+        <div class="s-kicker">
+          <span class="s-kicker-ua">Допоможи дитині з діабетом</span>
+          <span class="s-kicker-de">Hilf einem Kind mit Diabetes</span>
+        </div>
+        <div class="s-hero-name">{{ name_ua }}</div>
+        <div class="s-meta">
+          <span>{{ age }}&nbsp;{{ age_word_ua }}</span>
+          <span class="dot">·</span>
+          <span>{{ city_ua }}</span>
+        </div>
+        <div class="s-name-alt">{{ name_de }}&nbsp;·&nbsp;{{ age }}&nbsp;{{ age_word_de }}&nbsp;·&nbsp;{{ city_de }}</div>
+      </div>
+      <div class="s-hero-illustration">
+        <img src="{{ illustration }}" alt="">
+      </div>
+    </div>
+  </section>
+
+  <section class="s-story">
+    <div>
+      <div class="s-col-label">ІСТОРІЯ</div>
+      <p class="s-col-text">{{ story_ua }}</p>
+    </div>
+    <div>
+      <div class="s-col-label">GESCHICHTE</div>
+      <p class="s-col-text">{{ story_de }}</p>
+    </div>
+  </section>
+
+  <section class="s-partners">
+    <div class="s-partners-label">
+      <span class="s-partners-ua">{{ fund.partners_ua }}</span>
+      <span class="s-partners-de">{{ fund.partners_de }}</span>
+    </div>
+    {% if partners %}
+      <div class="s-partners-logos">
+        {% for p in partners %}<img src="{{ p }}" alt="" class="s-partners-logo">{% endfor %}
+      </div>
+    {% else %}
+      <img src="assets/partners_logos.png" alt="Partners" class="s-partners-img">
+    {% endif %}
+    <div class="s-ref">№&nbsp;{{ ref_id }}</div>
+  </section>
+
+</div>
+<script>
+(function(){
+  function fit(){
+    var n=document.querySelector('.s-hero-name'),c=document.querySelector('.s-hero-text');
+    if(!n||!c)return;
+    var sz=parseFloat(getComputedStyle(n).fontSize);
+    while(n.scrollWidth>c.clientWidth&&sz>30){sz--;n.style.fontSize=sz+'px';}
+  }
+  if(document.fonts&&document.fonts.ready){document.fonts.ready.then(function(){requestAnimationFrame(fit);});}
+  else{window.addEventListener('load',fit);}
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>{{ name_ua }} — Пост 2</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+/* ===== POST 2 — 1080×1080 — Needs + CTA ===== */
+body { background: var(--paper); }
+
+.s-page {
+  width: 1080px; height: 1080px;
+  display: flex; flex-direction: column;
+  overflow: hidden; background: var(--paper);
+}
+
+/* --- Mini header 80px --- */
+.s-mini-header {
+  flex-shrink: 0; height: 80px; padding: 0 50px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 2px solid var(--navy);
+}
+.s-brand { display: flex; align-items: center; gap: 12px; }
+.s-brand-mark { height: 48px; width: auto; display: block; flex-shrink: 0; }
+.s-brand-name { display: flex; flex-direction: column; gap: 3px; line-height: 1; }
+.s-brand-name-sub {
+  font-family: var(--f-display); font-weight: 500; font-size: 10px;
+  color: var(--navy); letter-spacing: 0.14em; text-transform: uppercase;
+}
+.s-brand-name-main {
+  font-family: var(--f-display); font-weight: 900; font-size: 22px;
+  color: var(--navy); letter-spacing: 0.01em;
+}
+.s-chip {
+  background: var(--yellow); color: var(--navy);
+  padding: 7px 16px; border: 2px solid var(--navy);
+  font-family: var(--f-display); font-weight: 700; font-size: 12px;
+  letter-spacing: 0.1em; border-radius: 3px;
+}
+
+/* --- Needs flex:1 (~660px) --- */
+.s-needs {
+  flex: 1; min-height: 0;
+  background: var(--cream);
+  padding: 30px 54px;
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 36px; align-items: center; overflow: hidden;
+}
+.s-needs-head {
+  grid-column: 1 / -1;
+  display: flex; justify-content: space-between; align-items: baseline;
+  border-bottom: 1.5px dashed var(--navy); padding-bottom: 14px; margin-bottom: 14px;
+}
+.s-needs-label-ua {
+  font-family: var(--f-display); font-weight: 700; font-size: 20px;
+  color: var(--navy); letter-spacing: 0.1em;
+}
+.s-needs-label-de {
+  font-family: var(--f-display); font-weight: 700; font-size: 17px;
+  color: var(--muted); letter-spacing: 0.08em;
+}
+.s-needs-list { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+.s-needs-list li {
+  display: flex; justify-content: space-between; align-items: baseline;
+  gap: 24px; padding-left: 32px; position: relative;
+}
+.s-needs-list li::before {
+  content: ""; position: absolute; left: 0; top: 9px;
+  width: 18px; height: 18px;
+  background: var(--yellow); border: 2px solid var(--navy); border-radius: 3px;
+}
+.s-item-texts { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
+.s-item-ua { font-size: 21px; font-weight: 600; color: var(--navy); }
+.s-item-de { font-size: 17px; color: var(--muted); font-style: italic; }
+.s-item-price {
+  font-family: var(--f-display); font-weight: 700; font-size: 23px;
+  color: var(--navy); white-space: nowrap; flex-shrink: 0;
+}
+.s-amount { text-align: right; padding-left: 28px; border-left: 3px solid var(--navy); }
+.s-amount-value {
+  font-family: var(--f-display); font-weight: 900; font-size: 76px;
+  color: var(--navy); line-height: 1;
+}
+.s-amount-label { font-size: 18px; color: var(--muted); margin-top: 8px; }
+
+/* --- CTA 340px --- */
+.s-cta {
+  flex-shrink: 0; height: 340px;
+  background: var(--navy); color: white;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 44px 60px; text-align: center; position: relative; overflow: hidden;
+}
+.s-cta::before {
+  content: ""; position: absolute; right: -54px; top: -54px;
+  width: 200px; height: 200px; background: var(--yellow);
+  transform: rotate(45deg); opacity: 0.07;
+}
+.s-cta-main {
+  font-family: var(--f-display); font-weight: 900; font-size: 38px;
+  color: var(--yellow); letter-spacing: 0.01em; position: relative;
+}
+.s-cta-alt {
+  font-family: var(--f-display); font-weight: 500; font-size: 26px;
+  color: white; opacity: 0.9; margin-top: 12px; position: relative;
+}
+.s-cta-contact {
+  margin-top: 20px; font-size: 20px; color: var(--blue-light);
+  display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; position: relative;
+}
+.s-cta-sep { opacity: 0.5; }
+</style>
+</head>
+<body>
+<div class="s-page">
+
+  <header class="s-mini-header">
+    <div class="s-brand">
+      <img src="assets/brand_logo_mark.png" alt="" class="s-brand-mark">
+      <div class="s-brand-name">
+        <span class="s-brand-name-sub">БЛАГОДІЙНИЙ ФОНД</span>
+        <span class="s-brand-name-main">ГОРА ДОБРА</span>
+      </div>
+    </div>
+    <div class="s-chip">ПАТРОНАЖ&nbsp;·&nbsp;PATENSCHAFT</div>
+  </header>
+
+  <section class="s-needs">
+    <div class="s-needs-head">
+      <div class="s-needs-label-ua">ЩО ПОТРІБНО ЩОМІСЯЦЯ</div>
+      <div class="s-needs-label-de">MONATLICHER BEDARF</div>
+    </div>
+    <ul class="s-needs-list">
+      {% for item in items %}
+      <li>
+        <div class="s-item-texts">
+          <span class="s-item-ua">{{ item.ua }}</span>
+          <span class="s-item-de">{{ item.de }}</span>
+        </div>
+        {% if item.price %}<span class="s-item-price">{{ item.price }}&nbsp;€</span>{% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    <div class="s-amount">
+      <div class="s-amount-value">{{ amount }}&nbsp;€</div>
+      <div class="s-amount-label">на місяць&nbsp;·&nbsp;pro Monat</div>
+    </div>
+  </section>
+
+  <section class="s-cta">
+    <div class="s-cta-main">{{ fund.cta_ua }}</div>
+    <div class="s-cta-alt">{{ fund.cta_de }}</div>
+    <div class="s-cta-contact">
+      {% if fund.website %}<span>{{ fund.website }}</span>{% endif %}
+      {% if fund.phone %}<span class="s-cta-sep">·</span><span>{{ fund.phone }}</span>{% endif %}
+      {% if fund.email %}<span class="s-cta-sep">·</span><span>{{ fund.email }}</span>{% endif %}
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

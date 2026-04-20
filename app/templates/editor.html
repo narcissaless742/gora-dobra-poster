@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Гора Добра — Постер для дитини</title>
+<title>Гора Добра — Конструктор постерів</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
 <header class="app-header">
   <div class="app-title">
     <span class="brand-mark">ГОРА&nbsp;ДОБРА</span>
-    <span class="app-sub">Постер для дитини</span>
+    <span class="app-sub">Конструктор постерів</span>
   </div>
 </header>
 
@@ -78,6 +78,90 @@
       <span></span>
       <button type="button" class="btn-next" data-target="2">Далі →</button>
     </div>
+
+    <!-- ===== Brand & fund settings ===== -->
+    <details class="brand-panel" id="brand-panel">
+      <summary class="brand-panel-toggle">
+        <span class="bpt-label">Налаштування фонду</span>
+        <span class="bpt-hint">контакти, текст CTA, логотипи</span>
+        <span class="bpt-arrow"></span>
+      </summary>
+      <div class="brand-panel-body">
+
+        <div class="bps">
+          <div class="bps-head">
+            <div class="bps-title">Заклик до дії</div>
+            <div class="bps-sub">Великий текст у темному блоці знизу постера</div>
+          </div>
+          <div class="bps-rows">
+            <div class="bps-row">
+              <span class="bps-tag">UA</span>
+              <input type="text" id="bs-cta-ua" class="bps-input" placeholder="Станьте патроном цієї дитини">
+            </div>
+            <div class="bps-row">
+              <span class="bps-tag">DE</span>
+              <input type="text" id="bs-cta-de" class="bps-input" placeholder="Werden Sie Pate für dieses Kind">
+            </div>
+          </div>
+        </div>
+
+        <div class="bps">
+          <div class="bps-head">
+            <div class="bps-title">Контакти фонду</div>
+            <div class="bps-sub">Відображаються під CTA-текстом на постері</div>
+          </div>
+          <div class="bps-rows">
+            <div class="bps-row">
+              <span class="bps-tag">URL</span>
+              <input type="text" id="bs-website" class="bps-input" placeholder="bf.gora.dobra.ua">
+            </div>
+            <div class="bps-row">
+              <span class="bps-tag">TEL</span>
+              <input type="text" id="bs-phone" class="bps-input" placeholder="+380 67 123 45 67">
+            </div>
+            <div class="bps-row">
+              <span class="bps-tag">@</span>
+              <input type="text" id="bs-email" class="bps-input" placeholder="info@goradobra.ua">
+            </div>
+          </div>
+        </div>
+
+        <div class="bps">
+          <div class="bps-head">
+            <div class="bps-title">Логотипи партнерів</div>
+            <div class="bps-sub">PNG або SVG · прозорий фон · до 3 логотипів</div>
+          </div>
+          <div class="bps-partner-grid">
+            <div class="bps-partner-card">
+              <div class="bps-partner-slot">1</div>
+              <label class="bps-partner-btn">
+                Обрати файл
+                <input type="file" class="partner-upload" data-slot="1" accept=".png,.jpg,.svg,.webp">
+              </label>
+              <span class="upload-status" id="partner-status-1">не завантажено</span>
+            </div>
+            <div class="bps-partner-card">
+              <div class="bps-partner-slot">2</div>
+              <label class="bps-partner-btn">
+                Обрати файл
+                <input type="file" class="partner-upload" data-slot="2" accept=".png,.jpg,.svg,.webp">
+              </label>
+              <span class="upload-status" id="partner-status-2">не завантажено</span>
+            </div>
+            <div class="bps-partner-card">
+              <div class="bps-partner-slot">3</div>
+              <label class="bps-partner-btn">
+                Обрати файл
+                <input type="file" class="partner-upload" data-slot="3" accept=".png,.jpg,.svg,.webp">
+              </label>
+              <span class="upload-status" id="partner-status-3">не завантажено</span>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" id="btn-save-brand" class="btn-save-brand">Зберегти налаштування</button>
+      </div>
+    </details>
   </section>
 
   <!-- ========== STEP 2 ========== -->
@@ -87,7 +171,8 @@
 
     <div class="q">
       <label for="story_ua" class="q-label">Історія українською:</label>
-      <textarea id="story_ua" class="big-textarea" rows="7" placeholder="Напишіть 3–5 речень українською. Переклад на німецьку зробимо автоматично."></textarea>
+      <textarea id="story_ua" class="big-textarea" rows="7" maxlength="350" placeholder="Напишіть 3–5 речень (до 350 символів). Переклад на німецьку зробимо автоматично."></textarea>
+      <div class="char-counter" id="story-ua-counter">0 / 350</div>
     </div>
 
     <div class="q translation-block">
@@ -95,7 +180,8 @@
         <span>Переклад німецькою <em>(автоматично)</em></span>
         <span class="translation-status" id="story-status"></span>
       </div>
-      <textarea id="story_de" class="big-textarea translation-textarea" rows="7" placeholder="Тут з'явиться переклад — можете редагувати"></textarea>
+      <textarea id="story_de" class="big-textarea translation-textarea" rows="7" maxlength="350" placeholder="Тут з'явиться переклад — можете редагувати"></textarea>
+      <div class="char-counter" id="story-de-counter">0 / 350</div>
       <button type="button" class="btn-link" id="btn-retranslate-story">🔄 Перекласти заново</button>
     </div>
 
@@ -143,9 +229,68 @@
     </div>
 
     <div class="final-actions">
-      <button type="button" id="btn-pdf" class="btn-big">⬇ Завантажити PDF</button>
-      <button type="button" class="btn-back btn-big-ghost" data-target="1">← Повернутись правити</button>
-      <button type="button" id="btn-new" class="btn-link">➕ Створити постер для іншої дитини</button>
+
+      <!-- A4 PDF -->
+      <button type="button" id="btn-pdf" class="btn-big">Завантажити PDF (A4)</button>
+
+      <!-- Social images -->
+      <div class="social-section">
+        <div class="social-section-title">Зображення для соцмереж</div>
+        <div class="social-grid">
+
+          <div class="social-card" data-fmt="story">
+            <div class="social-card-header">
+              <span class="social-card-name">Story</span>
+              <span class="social-card-dim">1080 × 1920</span>
+            </div>
+            <div class="social-preview-wrap">
+              <iframe class="social-preview-frame" data-fmt="story" title="Story preview"></iframe>
+              <div class="social-preview-loading">Завантаження...</div>
+            </div>
+            <div class="social-card-footer">
+              <span class="social-platform">Instagram · Facebook</span>
+              <button type="button" class="btn-social" id="btn-story">Завантажити</button>
+            </div>
+          </div>
+
+          <div class="social-card" data-fmt="post1">
+            <div class="social-card-header">
+              <span class="social-card-name">Пост 1</span>
+              <span class="social-card-dim">1080 × 1080</span>
+            </div>
+            <div class="social-preview-wrap">
+              <iframe class="social-preview-frame" data-fmt="post1" title="Пост 1 preview"></iframe>
+              <div class="social-preview-loading">Завантаження...</div>
+            </div>
+            <div class="social-card-footer">
+              <span class="social-platform">Герой + Історія</span>
+              <button type="button" class="btn-social" id="btn-post1">Завантажити</button>
+            </div>
+          </div>
+
+          <div class="social-card" data-fmt="post2">
+            <div class="social-card-header">
+              <span class="social-card-name">Пост 2</span>
+              <span class="social-card-dim">1080 × 1080</span>
+            </div>
+            <div class="social-preview-wrap">
+              <iframe class="social-preview-frame" data-fmt="post2" title="Пост 2 preview"></iframe>
+              <div class="social-preview-loading">Завантаження...</div>
+            </div>
+            <div class="social-card-footer">
+              <span class="social-platform">Потреби + CTA</span>
+              <button type="button" class="btn-social" id="btn-post2">Завантажити</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Download all -->
+      <button type="button" id="btn-all" class="btn-big btn-all">Завантажити все — PDF + 3 зображення</button>
+
+      <button type="button" class="btn-back btn-big-ghost" data-target="1">Повернутись правити</button>
+      <button type="button" id="btn-new" class="btn-link">Створити постер для іншої дитини</button>
     </div>
   </section>
 
@@ -164,7 +309,7 @@
   </div>
 </template>
 
-<!-- Toast (translation errors etc) -->
+<!-- Toast -->
 <div id="toast" class="toast"></div>
 
 <script src="{{ url_for('static', filename='editor.js') }}"></script>
