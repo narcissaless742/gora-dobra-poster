@@ -108,6 +108,8 @@ def build_context(data: dict) -> dict:
         "age_word_de": (data.get("age_word_de") or "Jahre alt").strip() if data.get("age_word_de") else "Jahre alt",
         "city_ua":     data.get("city_ua", "").strip(),
         "city_de":     data.get("city_de", "").strip(),
+        "region_ua":   data.get("region_ua", "").strip(),
+        "region_de":   data.get("region_de", "").strip(),
         "story_ua":    data.get("story_ua", "").strip(),
         "story_de":    data.get("story_de", "").strip(),
         "items": [

@@ -16,9 +16,10 @@ const AGE_BUCKETS = [
    STATE — all DE fields held in memory, not in DOM (except story)
    ================================ */
 const state = {
-  name_ua: '',  name_de: '',
-  city_ua: '',  city_de: '',
-  story_ua: '', story_de: '',
+  name_ua: '',    name_de: '',
+  city_ua: '',    city_de: '',
+  region_ua: '',  region_de: '',
+  story_ua: '',   story_de: '',
   items: [],       // [{ua, de, price}]
   age: 8,
   gender: 'f',
@@ -69,10 +70,12 @@ function toast(msg, ms = 2200) {
 /* ================================
    STEP 1 — name, age, gender, city
    ================================ */
-const nameInput = $('#name_ua');
-const cityInput = $('#city_ua');
-const hintName = $('#hint-name');
-const hintCity = $('#hint-city');
+const nameInput   = $('#name_ua');
+const cityInput   = $('#city_ua');
+const regionInput = $('#region_ua');
+const hintName   = $('#hint-name');
+const hintCity   = $('#hint-city');
+const hintRegion = $('#hint-region');
 const ageInput = $('#age');
 const genderImgM = $('#gender-img-m');
 const genderImgF = $('#gender-img-f');
@@ -108,6 +111,15 @@ cityInput.addEventListener('blur', async () => {
   const t = await translate(state.city_ua);
   state.city_de = t;
   setHint(hintCity, t);
+});
+
+regionInput.addEventListener('input', (e) => { state.region_ua = e.target.value; });
+regionInput.addEventListener('blur', async () => {
+  if (!state.region_ua.trim()) { setHint(hintRegion, ''); state.region_de = ''; return; }
+  setHint(hintRegion, '…');
+  const t = await translate(state.region_ua);
+  state.region_de = t;
+  setHint(hintRegion, t);
 });
 
 ageInput.addEventListener('input', (e) => {
@@ -310,6 +322,8 @@ function collectPayload() {
     name_de: state.name_de,
     city_ua: state.city_ua,
     city_de: state.city_de,
+    region_ua: state.region_ua,
+    region_de: state.region_de,
     story_ua: state.story_ua,
     story_de: state.story_de,
     items: state.items
@@ -375,15 +389,16 @@ btnNew.addEventListener('click', () => {
   if (!confirm('Створити постер для іншої дитини? Поточні дані зникнуть.')) return;
   state.name_ua = ''; state.name_de = '';
   state.city_ua = ''; state.city_de = '';
+  state.region_ua = ''; state.region_de = '';
   state.story_ua = ''; state.story_de = '';
   state.items = [];
   state.age = 8; state.gender = 'f';
   state.amount = 0; state.amountManual = false;
-  nameInput.value = ''; cityInput.value = '';
+  nameInput.value = ''; cityInput.value = ''; regionInput.value = '';
   storyUa.value = ''; storyDe.value = '';
   ageInput.value = '8';
   $$('input[name="gender"]').forEach(r => { r.checked = (r.value === 'f'); });
-  hintName.innerHTML = ''; hintCity.innerHTML = ''; storyStatus.textContent = '';
+  hintName.innerHTML = ''; hintCity.innerHTML = ''; hintRegion.innerHTML = ''; storyStatus.textContent = '';
   seedDefaultItems();
   renderItems();
   updateGenderPreviews();

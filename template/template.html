@@ -9,21 +9,9 @@
 <div class="page" data-items="{{ items|length }}">
 
   <header class="topbar">
-    <div class="brand-col brand-left">
-      <span class="brand-col-sub">БЛАГОДІЙНИЙ ФОНД</span>
-      <div class="brand-col-main-row">
-        <span class="brand-col-main">ГОРА ДОБРА</span>
-        <span class="brand-ua-chip">UA</span>
-      </div>
-    </div>
-    <img src="assets/brand_logo_mark.png" alt="" class="brand-center-icon">
-    <div class="brand-col brand-right">
-      <span class="brand-col-sub">CHARITY FUND</span>
-      <div class="brand-col-main-row">
-        <span class="brand-col-main">GORA DOBRA</span>
-        <span class="brand-ua-chip">UA</span>
-      </div>
-    </div>
+    <img src="assets/brand_logo_ua.svg" alt="Гора Добра" class="brand-logo-side">
+    <img src="assets/brand_icon.svg" alt="" class="brand-center-icon">
+    <img src="assets/brand_logo_en.svg" alt="Gora Dobra" class="brand-logo-side">
   </header>
 
   <section class="hero">
@@ -32,15 +20,18 @@
       <div class="hero-text">
         <div class="hero-kicker">
           <span class="kicker-ua">Допоможи дитині з діабетом</span>
+          <span class="kicker-sep">·</span>
           <span class="kicker-de">Hilf einem Kind mit Diabetes</span>
         </div>
+        <div class="hero-id">№ {{ ref_id }}</div>
         <h1 class="hero-name">{{ name_ua }}</h1>
         <div class="hero-meta">
           <span class="hero-age">{{ age }} {{ age_word_ua }}</span>
           <span class="meta-dot">·</span>
           <span class="hero-location">{{ city_ua }}</span>
+          {% if region_ua %}<span class="meta-dot">·</span><span class="hero-location">{{ region_ua }}</span>{% endif %}
         </div>
-        <div class="hero-name-alt">{{ name_de }} · {{ age }} {{ age_word_de }} · {{ city_de }}</div>
+        <div class="hero-name-alt">{{ name_de }} · {{ age }} {{ age_word_de }} · {{ city_de }}{% if region_de %} · {{ region_de }}{% endif %}</div>
       </div>
       <div class="hero-illustration">
         <img src="{{ illustration }}" alt="">

@@ -60,63 +60,16 @@ html, body {
 }
 
 .brand-center-icon {
-  height: 18mm;
+  height: 16mm;
   width: auto;
   display: block;
   flex-shrink: 0;
 }
 
-.brand-col {
-  display: flex;
-  flex-direction: column;
-  gap: 1mm;
-  flex: 1;
-}
-
-.brand-left {
-  align-items: flex-end;
-  text-align: right;
-}
-
-.brand-right {
-  align-items: flex-start;
-  text-align: left;
-}
-
-.brand-col-sub {
-  font-family: var(--f-display);
-  font-weight: 500;
-  font-size: 6pt;
-  color: var(--navy);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.brand-col-main-row {
-  display: flex;
-  align-items: center;
-  gap: 2mm;
-}
-
-.brand-col-main {
-  font-family: var(--f-display);
-  font-weight: 900;
-  font-size: 15pt;
-  color: var(--navy);
-  letter-spacing: 0.01em;
-  line-height: 1;
-}
-
-.brand-ua-chip {
-  background: var(--yellow);
-  color: var(--navy);
-  font-family: var(--f-display);
-  font-weight: 700;
-  font-size: 6pt;
-  padding: 1.5px 4px;
-  border: 1px solid var(--navy);
-  border-radius: 2px;
-  letter-spacing: 0.06em;
+.brand-logo-side {
+  height: 13mm;
+  width: auto;
+  display: block;
   flex-shrink: 0;
 }
 
@@ -127,7 +80,7 @@ html, body {
   margin-bottom: 5mm;
   padding: 3mm 3mm 3mm 3mm;
   overflow: hidden;
-  height: 65mm;
+  height: 62mm;
   background: linear-gradient(120deg, rgba(176,217,239,0.20) 0%, rgba(252,248,89,0.07) 100%);
   border-radius: 2mm;
 }
@@ -168,23 +121,36 @@ html, body {
 
 .hero-kicker {
   display: flex;
-  flex-direction: column;
-  gap: 1mm;
-  margin-bottom: 5mm;
+  flex-direction: row;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 3mm;
   font-family: var(--f-body);
   font-weight: 600;
-  font-size: 9pt;
-  letter-spacing: 0.08em;
+  font-size: 8.5pt;
+  letter-spacing: 0.06em;
 }
 .kicker-ua {
   color: var(--navy);
   text-transform: uppercase;
 }
+.kicker-sep {
+  color: var(--blue-mid);
+}
 .kicker-de {
   color: var(--muted);
   font-style: italic;
   font-weight: 500;
-  letter-spacing: 0.04em;
+}
+
+.hero-id {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: 7.5pt;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  margin-bottom: 1mm;
 }
 
 .hero-name {
@@ -211,8 +177,15 @@ html, body {
 
 .meta-dot { color: var(--blue-mid); }
 
+.hero-region {
+  margin-top: 1.5mm;
+  font-weight: 500;
+  font-size: 10pt;
+  color: var(--muted);
+}
+
 .hero-name-alt {
-  margin-top: 3mm;
+  margin-top: 2mm;
   font-weight: 500;
   font-size: 11pt;
   color: var(--muted);
@@ -224,8 +197,8 @@ html, body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 7mm;
-  margin-bottom: 6mm;
-  max-height: 62mm;
+  margin-bottom: 4mm;
+  max-height: 72mm;
   overflow: hidden;
 }
 

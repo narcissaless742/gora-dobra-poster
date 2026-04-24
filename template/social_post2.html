@@ -17,26 +17,11 @@ body { background: var(--paper); }
 /* --- Mini header 80px --- */
 .s-mini-header {
   flex-shrink: 0; height: 80px; padding: 0 50px;
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex; align-items: center; justify-content: center; gap: 18px;
   border-bottom: 2px solid var(--navy);
 }
-.s-brand { display: flex; align-items: center; gap: 12px; }
-.s-brand-mark { height: 48px; width: auto; display: block; flex-shrink: 0; }
-.s-brand-name { display: flex; flex-direction: column; gap: 3px; line-height: 1; }
-.s-brand-name-sub {
-  font-family: var(--f-display); font-weight: 500; font-size: 10px;
-  color: var(--navy); letter-spacing: 0.14em; text-transform: uppercase;
-}
-.s-brand-name-main {
-  font-family: var(--f-display); font-weight: 900; font-size: 22px;
-  color: var(--navy); letter-spacing: 0.01em;
-}
-.s-chip {
-  background: var(--yellow); color: var(--navy);
-  padding: 7px 16px; border: 2px solid var(--navy);
-  font-family: var(--f-display); font-weight: 700; font-size: 12px;
-  letter-spacing: 0.1em; border-radius: 3px;
-}
+.s-brand-icon { height: 50px; width: auto; display: block; flex-shrink: 0; }
+.s-brand-logo-side { height: 40px; width: auto; display: block; flex-shrink: 0; }
 
 /* --- Needs flex:1 (~660px) --- */
 .s-needs {
@@ -44,7 +29,7 @@ body { background: var(--paper); }
   background: var(--cream);
   padding: 30px 54px;
   display: grid; grid-template-columns: 1fr auto;
-  gap: 36px; align-items: center; overflow: hidden;
+  gap: 36px; align-items: center; align-content: center; overflow: hidden;
 }
 .s-needs-head {
   grid-column: 1 / -1;
@@ -114,14 +99,9 @@ body { background: var(--paper); }
 <div class="s-page">
 
   <header class="s-mini-header">
-    <div class="s-brand">
-      <img src="assets/brand_logo_mark.png" alt="" class="s-brand-mark">
-      <div class="s-brand-name">
-        <span class="s-brand-name-sub">БЛАГОДІЙНИЙ ФОНД</span>
-        <span class="s-brand-name-main">ГОРА ДОБРА</span>
-      </div>
-    </div>
-    <div class="s-chip">ПАТРОНАЖ&nbsp;·&nbsp;PATENSCHAFT</div>
+    <img src="assets/brand_logo_ua.svg" alt="Гора Добра" class="s-brand-logo-side">
+    <img src="assets/brand_icon.svg" alt="" class="s-brand-icon">
+    <img src="assets/brand_logo_en.svg" alt="Gora Dobra" class="s-brand-logo-side">
   </header>
 
   <section class="s-needs">
