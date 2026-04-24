@@ -222,11 +222,11 @@ function renderItems() {
     });
     itemsList.appendChild(node);
   });
-  btnAddItem.disabled = state.items.length >= 5;
+  btnAddItem.disabled = state.items.length >= 3;
 }
 
 btnAddItem.addEventListener('click', () => {
-  if (state.items.length >= 5) return;
+  if (state.items.length >= 3) return;
   state.items.push({ ua: '', de: '', price: '' });
   renderItems();
   const rows = itemsList.querySelectorAll('.item-ua');
@@ -251,8 +251,12 @@ function setAmountMode(manual) {
   btnResetAmount.classList.toggle('hidden', !manual);
 }
 
+const AMOUNT_MAX = 150;
+
 amountInput.addEventListener('input', (e) => {
-  state.amount = e.target.value;
+  let v = parseFloat(e.target.value) || 0;
+  if (v > AMOUNT_MAX) { v = AMOUNT_MAX; e.target.value = AMOUNT_MAX; }
+  state.amount = v;
   setAmountMode(true);
 });
 
@@ -538,8 +542,8 @@ $('#btn-all').addEventListener('click', () =>
    ================================ */
 function seedDefaultItems() {
   state.items = [
-    { ua: 'FreeStyle Libre 3 — сенсори, 2 шт', de: 'FreeStyle Libre 3 Sensoren, 2 Stk.', price: 130 },
-    { ua: 'Пластирі-фіксатори', de: 'Fixierpflaster', price: 30 },
+    { ua: 'FreeStyle Libre 3 — сенсори, 2 шт', de: 'FreeStyle Libre 3 Sensoren, 2 Stk.', price: 65 },
+    { ua: 'Пластирі-фіксатори', de: 'Fixierpflaster', price: 20 },
   ];
 }
 

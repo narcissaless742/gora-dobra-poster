@@ -53,65 +53,72 @@ html, body {
 .topbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 5mm;
   padding-bottom: 6mm;
   border-bottom: 1.5px solid var(--navy);
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 6mm;
-}
-
-.brand-mark {
-  height: 20mm;
+.brand-center-icon {
+  height: 18mm;
   width: auto;
   display: block;
   flex-shrink: 0;
 }
 
-.brand-name {
+.brand-col {
   display: flex;
   flex-direction: column;
-  gap: 1.5mm;
-  line-height: 1;
+  gap: 1mm;
+  flex: 1;
 }
 
-.brand-name-sub {
+.brand-left {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.brand-right {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.brand-col-sub {
   font-family: var(--f-display);
   font-weight: 500;
-  font-size: 6.5pt;
+  font-size: 6pt;
   color: var(--navy);
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
-.brand-name-main {
+.brand-col-main-row {
+  display: flex;
+  align-items: center;
+  gap: 2mm;
+}
+
+.brand-col-main {
   font-family: var(--f-display);
   font-weight: 900;
-  font-size: 17pt;
+  font-size: 15pt;
   color: var(--navy);
   letter-spacing: 0.01em;
   line-height: 1;
 }
 
-.campaign-chip {
+.brand-ua-chip {
   background: var(--yellow);
   color: var(--navy);
-  padding: 6px 12px;
-  border: 1.5px solid var(--navy);
   font-family: var(--f-display);
   font-weight: 700;
-  font-size: 8.5pt;
-  letter-spacing: 0.1em;
-  display: inline-flex;
-  gap: 6px;
-  align-items: center;
+  font-size: 6pt;
+  padding: 1.5px 4px;
+  border: 1px solid var(--navy);
   border-radius: 2px;
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
 }
-
-.chip-sep { opacity: 0.5; }
 
 /* ========= HERO ========= */
 .hero {
@@ -321,54 +328,7 @@ html, body {
 }
 
 /* ========= ADAPTIVE SIZING by item count ========= */
-
-/* 4 items: moderate compression */
-.page[data-items="4"] { padding: 10mm 14mm; }
-.page[data-items="4"] .brand-mark { height: 19mm; }
-.page[data-items="4"] .brand-name-main { font-size: 15pt; }
-.page[data-items="4"] .hero { height: 62mm; margin-top: 2mm; margin-bottom: 4mm; }
-.page[data-items="4"] .hero-illustration { width: 80mm; }
-.page[data-items="4"] .hero-illustration img { width: 160mm; }
-.page[data-items="4"] .story { max-height: 55mm; }
-.page[data-items="4"] .needs-list { gap: 2.5mm; }
-.page[data-items="4"] .needs { padding: 4mm 6mm; }
-.page[data-items="4"] .item-ua { font-size: 10pt; }
-.page[data-items="4"] .item-de { font-size: 8.5pt; }
-.page[data-items="4"] .item-price { font-size: 10.5pt; }
-
-/* 5 items: aggressive compression to fit one page */
-.page[data-items="5"] { padding: 9mm 14mm; }
-.page[data-items="5"] .brand-mark { height: 17mm; }
-.page[data-items="5"] .brand-name-main { font-size: 13pt; }
-.page[data-items="5"] .topbar { padding-bottom: 4mm; }
-.page[data-items="5"] .hero { height: 58mm; margin-top: 2mm; margin-bottom: 3mm; }
-.page[data-items="5"] .hero-illustration { width: 72mm; }
-.page[data-items="5"] .hero-illustration img { width: 144mm; }
-.page[data-items="5"] .story { max-height: 46mm; gap: 6mm; }
-.page[data-items="5"] .col-label { margin-bottom: 2mm; padding-bottom: 1.5mm; font-size: 8.5pt; }
-.page[data-items="5"] .col-text { font-size: 9pt; line-height: 1.35; }
-.page[data-items="5"] .hero-kicker { margin-bottom: 3mm; font-size: 8pt; }
-.page[data-items="5"] .hero-meta { font-size: 13pt; margin-top: 2mm; }
-.page[data-items="5"] .hero-name-alt { font-size: 9.5pt; margin-top: 1.5mm; }
-.page[data-items="5"] .needs-list { gap: 2mm; }
-.page[data-items="5"] .needs { padding: 3.5mm 5mm; }
-.page[data-items="5"] .needs-head { padding-bottom: 2mm; margin-bottom: 1mm; }
-.page[data-items="5"] .needs-label-ua,
-.page[data-items="5"] .needs-label-de { font-size: 9pt; }
-.page[data-items="5"] .item-ua { font-size: 9.5pt; }
-.page[data-items="5"] .item-de { font-size: 8pt; }
-.page[data-items="5"] .item-price { font-size: 10pt; }
-.page[data-items="5"] .amount-value { font-size: 26pt; }
-.page[data-items="5"] .amount-label { font-size: 8pt; margin-top: 1mm; }
-.page[data-items="5"] .needs-list li { padding-left: 14px; }
-.page[data-items="5"] .needs-list li::before { top: 4px; width: 8px; height: 8px; }
-.page[data-items="5"] .cta { padding: 3.5mm 6mm; }
-.page[data-items="5"] .cta-main { font-size: 14pt; }
-.page[data-items="5"] .cta-alt { font-size: 10pt; margin-top: 1mm; }
-.page[data-items="5"] .cta-contact { margin-top: 2mm; font-size: 8.5pt; }
-.page[data-items="5"] .partners { gap: 2mm; }
-.page[data-items="5"] .partners-ua { font-size: 8.5pt; }
-.page[data-items="5"] .partners-de { font-size: 7.5pt; }
+/* Max 3 items — no compression overrides needed */
 
 .item-ua {
   font-size: 10.5pt;
@@ -487,8 +447,20 @@ html, body {
   opacity: 0.9;
 }
 
+.cta-email {
+  margin-top: 2.5mm;
+  font-size: 9pt;
+  color: var(--blue-light);
+  letter-spacing: 0.02em;
+}
+
+.cta-email b {
+  color: var(--yellow);
+  font-weight: 700;
+}
+
 .cta-contact {
-  margin-top: 3mm;
+  margin-top: 2mm;
   font-size: 9.5pt;
   color: var(--blue-light);
   display: flex;

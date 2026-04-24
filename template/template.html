@@ -9,17 +9,20 @@
 <div class="page" data-items="{{ items|length }}">
 
   <header class="topbar">
-    <div class="brand">
-      <img src="assets/brand_logo_mark.png" alt="" class="brand-mark">
-      <div class="brand-name">
-        <span class="brand-name-sub">БЛАГОДІЙНИЙ ФОНД</span>
-        <span class="brand-name-main">ГОРА ДОБРА</span>
+    <div class="brand-col brand-left">
+      <span class="brand-col-sub">БЛАГОДІЙНИЙ ФОНД</span>
+      <div class="brand-col-main-row">
+        <span class="brand-col-main">ГОРА ДОБРА</span>
+        <span class="brand-ua-chip">UA</span>
       </div>
     </div>
-    <div class="campaign-chip">
-      <span class="chip-ua">ПАТРОНАЖ</span>
-      <span class="chip-sep">·</span>
-      <span class="chip-de">PATENSCHAFT</span>
+    <img src="assets/brand_logo_mark.png" alt="" class="brand-center-icon">
+    <div class="brand-col brand-right">
+      <span class="brand-col-sub">CHARITY FUND</span>
+      <div class="brand-col-main-row">
+        <span class="brand-col-main">GORA DOBRA</span>
+        <span class="brand-ua-chip">UA</span>
+      </div>
     </div>
   </header>
 
@@ -81,6 +84,7 @@
   <section class="cta">
     <div class="cta-main">{{ fund.cta_ua }}</div>
     <div class="cta-alt">{{ fund.cta_de }}</div>
+    <div class="cta-email">Напишіть e-mail з темою: <b>{{ name_ua }}</b></div>
     <div class="cta-contact">
       {% if fund.website %}<span>{{ fund.website }}</span>{% endif %}
       {% if fund.website and fund.phone %}<span class="meta-dot">·</span>{% endif %}
