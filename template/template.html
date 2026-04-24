@@ -23,14 +23,13 @@
           <span class="kicker-sep">·</span>
           <span class="kicker-de">Hilf einem Kind mit Diabetes</span>
         </div>
-        <div class="hero-id">№ {{ ref_id }}</div>
         <h1 class="hero-name">{{ name_ua }}</h1>
-        <div class="hero-meta">
-          <span class="hero-age">{{ age }} {{ age_word_ua }}</span>
-          <span class="meta-dot">·</span>
-          <span class="hero-location">{{ city_ua }}</span>
-          {% if region_ua %}<span class="meta-dot">·</span><span class="hero-location">{{ region_ua }}</span>{% endif %}
+        <div class="hero-age-id-line">
+          <span>{{ age }} {{ age_word_ua }}</span>
+          <span class="hero-agediv"></span>
+          <span>{{ ref_id }}</span>
         </div>
+        <div class="hero-location-line">{{ city_ua }}{% if region_ua %} · {{ region_ua }}{% endif %}</div>
         <div class="hero-name-alt">{{ name_de }} · {{ age }} {{ age_word_de }} · {{ city_de }}{% if region_de %} · {{ region_de }}{% endif %}</div>
       </div>
       <div class="hero-illustration">
@@ -73,14 +72,21 @@
   </section>
 
   <section class="cta">
-    <div class="cta-main">{{ fund.cta_ua }}</div>
-    <div class="cta-alt">{{ fund.cta_de }}</div>
-    <div class="cta-email">Напишіть e-mail з темою: <b>{{ name_ua }}</b></div>
-    <div class="cta-contact">
-      {% if fund.website %}<span>{{ fund.website }}</span>{% endif %}
-      {% if fund.website and fund.phone %}<span class="meta-dot">·</span>{% endif %}
-      {% if fund.phone %}<span>{{ fund.phone }}</span>{% endif %}
-      {% if fund.email %}<span class="meta-dot">·</span><span>{{ fund.email }}</span>{% endif %}
+    <div class="cta-headline">
+      <span class="cta-headline-ua">СТАНЬТЕ ПАТРОНОМ ЦІЄЇ ДИТИНИ</span>
+      <span class="cta-vdiv"></span>
+      <span class="cta-headline-de">Werden Sie Pate für dieses Kind</span>
+    </div>
+    <div class="cta-body">
+      <div class="cta-subject">
+        <span class="cta-subject-pre">Напишіть e-mail з темою:</span>
+        <span class="cta-subject-val">{{ name_ua }}&nbsp;·&nbsp;{{ ref_id }}</span>
+      </div>
+      <div class="cta-contacts-col">
+        {% if fund.email %}<div>{{ fund.email }}</div>{% endif %}
+        {% if fund.phone %}<div>{{ fund.phone }}</div>{% endif %}
+        {% if fund.website %}<div>{{ fund.website }}</div>{% endif %}
+      </div>
     </div>
   </section>
 

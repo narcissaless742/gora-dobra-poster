@@ -95,12 +95,19 @@ def get_partner_logos() -> list | None:
     return logos if logos else None
 
 
+def _fmt_id(raw) -> str:
+    s = str(raw or "").strip()
+    if not s:
+        return "0001"
+    return s.zfill(4) if s.isdigit() else s
+
+
 def build_context(data: dict) -> dict:
     age = int(data.get("age") or 0)
     bucket = age_bucket(age)
     gender = data.get("gender", "m")
     return {
-        "ref_id":      (data.get("ref_id") or f"GD-{uuid.uuid4().hex[:6].upper()}"),
+        "ref_id":      _fmt_id(data.get("ref_id")),
         "name_ua":     data.get("name_ua", "").strip(),
         "name_de":     data.get("name_de", "").strip(),
         "age":         age,
