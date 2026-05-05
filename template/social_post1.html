@@ -56,7 +56,13 @@ body { background: var(--paper); }
   color: var(--navy); display: flex; gap: 12px; align-items: baseline;
 }
 .s-meta .dot { color: var(--blue-mid); }
-.s-name-alt { margin-top: 12px; font-weight: 500; font-size: 18px; color: var(--muted); font-style: italic; }
+.s-meta-id { color: var(--blue-mid); }
+.s-location {
+  margin-top: 8px;
+  font-family: var(--f-body); font-weight: 600; font-size: 22px;
+  color: var(--navy); opacity: 0.85;
+}
+.s-name-alt { margin-top: 14px; font-weight: 500; font-size: 18px; color: var(--muted); font-style: italic; }
 
 /* --- Story flex:1 (~500px) --- */
 .s-story {
@@ -110,9 +116,10 @@ body { background: var(--paper); }
         <div class="s-meta">
           <span>{{ age }}&nbsp;{{ age_word_ua }}</span>
           <span class="dot">·</span>
-          <span>{{ city_ua }}</span>
+          <span class="s-meta-id">{{ ref_id }}</span>
         </div>
-        <div class="s-name-alt">{{ name_de }}&nbsp;·&nbsp;{{ age }}&nbsp;{{ age_word_de }}&nbsp;·&nbsp;{{ city_de }}</div>
+        <div class="s-location">{{ city_ua }}{% if region_ua %}&nbsp;·&nbsp;{{ region_ua }}{% endif %}</div>
+        <div class="s-name-alt">{{ name_de }}&nbsp;·&nbsp;{{ age }}&nbsp;{{ age_word_de }}&nbsp;·&nbsp;{{ city_de }}{% if region_de %}&nbsp;·&nbsp;{{ region_de }}{% endif %}</div>
       </div>
       <div class="s-hero-illustration">
         <img src="{{ illustration }}" alt="">

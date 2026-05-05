@@ -56,6 +56,12 @@ body { background: var(--paper); }
   color: var(--navy); display: flex; gap: 14px; align-items: baseline;
 }
 .s-meta .dot { color: var(--blue-mid); }
+.s-meta-id { color: var(--blue-mid); }
+.s-location {
+  margin-top: 10px;
+  font-family: var(--f-body); font-weight: 600; font-size: 26px;
+  color: var(--navy); opacity: 0.85;
+}
 .s-name-alt { margin-top: 14px; font-weight: 500; font-size: 24px; color: var(--muted); font-style: italic; }
 
 /* --- Story 380px --- */
@@ -116,29 +122,57 @@ body { background: var(--paper); }
 }
 .s-amount-label { font-size: 18px; color: var(--muted); margin-top: 8px; }
 
-/* --- CTA 230px --- */
+/* --- CTA 320px --- */
 .s-cta {
-  flex-shrink: 0; height: 230px;
+  flex-shrink: 0; height: 320px;
   background: var(--navy); color: white;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  padding: 32px 54px; text-align: center; position: relative; overflow: hidden;
+  display: flex; flex-direction: column; align-items: stretch; justify-content: center;
+  padding: 26px 54px; position: relative; overflow: hidden;
 }
 .s-cta::before {
   content: ""; position: absolute; right: -44px; top: -44px;
   width: 170px; height: 170px; background: var(--yellow);
   transform: rotate(45deg); opacity: 0.08;
 }
-.s-cta-main {
-  font-family: var(--f-display); font-weight: 900; font-size: 32px;
-  color: var(--yellow); letter-spacing: 0.01em; position: relative;
+.s-cta-headline {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px; margin-bottom: 16px; position: relative;
 }
-.s-cta-alt {
-  font-family: var(--f-display); font-weight: 500; font-size: 22px;
-  color: white; opacity: 0.9; margin-top: 10px; position: relative;
+.s-cta-headline-ua {
+  font-family: var(--f-display); font-weight: 900; font-size: 24px;
+  color: var(--yellow); text-transform: uppercase; letter-spacing: 0.02em;
+  white-space: nowrap; text-align: center;
 }
-.s-cta-contact {
-  margin-top: 18px; font-size: 18px; color: var(--blue-light);
-  display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; position: relative;
+.s-cta-vdiv { display: none; }
+.s-cta-headline-de {
+  font-family: var(--f-display); font-weight: 900; font-size: 24px;
+  color: white; text-transform: uppercase; letter-spacing: 0.02em;
+  white-space: nowrap; text-align: center;
+}
+.s-cta-body {
+  display: flex; gap: 14px; align-items: stretch;
+  margin-bottom: 14px; position: relative;
+}
+.s-cta-subject {
+  flex: 1; min-width: 0;
+  border: 1.5px solid rgba(176,217,239,0.25);
+  background: rgba(255,255,255,0.05);
+  padding: 10px 14px;
+  display: flex; flex-direction: column; gap: 3px;
+  text-align: left;
+}
+.s-cta-subject-pre {
+  font-size: 12px; color: var(--blue-light); opacity: 0.7;
+  letter-spacing: 0.03em;
+}
+.s-cta-subject-val {
+  font-family: var(--f-display); font-weight: 700; font-size: 18px;
+  color: var(--yellow);
+}
+.s-cta-contacts {
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; font-size: 16px; color: var(--blue-light);
+  flex-wrap: wrap; position: relative;
 }
 .s-cta-sep { opacity: 0.5; }
 
@@ -180,9 +214,10 @@ body { background: var(--paper); }
         <div class="s-meta">
           <span>{{ age }}&nbsp;{{ age_word_ua }}</span>
           <span class="dot">·</span>
-          <span>{{ city_ua }}</span>
+          <span class="s-meta-id">{{ ref_id }}</span>
         </div>
-        <div class="s-name-alt">{{ name_de }}&nbsp;·&nbsp;{{ age }}&nbsp;{{ age_word_de }}&nbsp;·&nbsp;{{ city_de }}</div>
+        <div class="s-location">{{ city_ua }}{% if region_ua %}&nbsp;·&nbsp;{{ region_ua }}{% endif %}</div>
+        <div class="s-name-alt">{{ name_de }}&nbsp;·&nbsp;{{ age }}&nbsp;{{ age_word_de }}&nbsp;·&nbsp;{{ city_de }}{% if region_de %}&nbsp;·&nbsp;{{ region_de }}{% endif %}</div>
       </div>
       <div class="s-hero-illustration">
         <img src="{{ illustration }}" alt="">
@@ -210,8 +245,8 @@ body { background: var(--paper); }
       {% for item in items %}
       <li>
         <div class="s-item-texts">
-          <span class="s-item-ua">{{ item.ua }}</span>
-          <span class="s-item-de">{{ item.de }}</span>
+          <span class="s-item-ua">{{ item.ua }}{% if item.count %} · {{ item.count }} шт{% endif %}</span>
+          <span class="s-item-de">{{ item.de }}{% if item.count %} · {{ item.count }} Stk.{% endif %}</span>
         </div>
         {% if item.price %}<span class="s-item-price">{{ item.price }}&nbsp;€</span>{% endif %}
       </li>
@@ -224,12 +259,25 @@ body { background: var(--paper); }
   </section>
 
   <section class="s-cta">
-    <div class="s-cta-main">{{ fund.cta_ua }}</div>
-    <div class="s-cta-alt">{{ fund.cta_de }}</div>
-    <div class="s-cta-contact">
-      {% if fund.website %}<span>{{ fund.website }}</span>{% endif %}
+    <div class="s-cta-headline">
+      <span class="s-cta-headline-ua">{{ fund.cta_ua }}</span>
+      <span class="s-cta-vdiv"></span>
+      <span class="s-cta-headline-de">{{ fund.cta_de }}</span>
+    </div>
+    <div class="s-cta-body">
+      <div class="s-cta-subject">
+        <span class="s-cta-subject-pre">Напишіть e-mail з темою:</span>
+        <span class="s-cta-subject-val">{{ name_ua }}&nbsp;·&nbsp;{{ ref_id }}</span>
+      </div>
+      <div class="s-cta-subject">
+        <span class="s-cta-subject-pre">Schreiben Sie eine E-Mail mit dem Betreff:</span>
+        <span class="s-cta-subject-val">{{ name_de }}&nbsp;·&nbsp;{{ ref_id }}</span>
+      </div>
+    </div>
+    <div class="s-cta-contacts">
+      {% if fund.email %}<span>{{ fund.email }}</span>{% endif %}
       {% if fund.phone %}<span class="s-cta-sep">·</span><span>{{ fund.phone }}</span>{% endif %}
-      {% if fund.email %}<span class="s-cta-sep">·</span><span>{{ fund.email }}</span>{% endif %}
+      {% if fund.website %}<span class="s-cta-sep">·</span><span>{{ fund.website }}</span>{% endif %}
     </div>
   </section>
 

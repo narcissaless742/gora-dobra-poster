@@ -58,8 +58,8 @@
       {% for item in items %}
       <li>
         <div class="item-texts">
-          <span class="item-ua">{{ item.ua }}</span>
-          <span class="item-de">{{ item.de }}</span>
+          <span class="item-ua">{{ item.ua }}{% if item.count %} · {{ item.count }} шт{% endif %}</span>
+          <span class="item-de">{{ item.de }}{% if item.count %} · {{ item.count }} Stk.{% endif %}</span>
         </div>
         {% if item.price %}<span class="item-price">{{ item.price }}&nbsp;€</span>{% endif %}
       </li>
@@ -82,11 +82,15 @@
         <span class="cta-subject-pre">Напишіть e-mail з темою:</span>
         <span class="cta-subject-val">{{ name_ua }}&nbsp;·&nbsp;{{ ref_id }}</span>
       </div>
-      <div class="cta-contacts-col">
-        {% if fund.email %}<div>{{ fund.email }}</div>{% endif %}
-        {% if fund.phone %}<div>{{ fund.phone }}</div>{% endif %}
-        {% if fund.website %}<div>{{ fund.website }}</div>{% endif %}
+      <div class="cta-subject">
+        <span class="cta-subject-pre">Schreiben Sie eine E-Mail mit dem Betreff:</span>
+        <span class="cta-subject-val">{{ name_de }}&nbsp;·&nbsp;{{ ref_id }}</span>
       </div>
+    </div>
+    <div class="cta-contacts">
+      {% if fund.email %}<span>{{ fund.email }}</span>{% endif %}
+      {% if fund.phone %}<span class="cta-contacts-sep">·</span><span>{{ fund.phone }}</span>{% endif %}
+      {% if fund.website %}<span class="cta-contacts-sep">·</span><span>{{ fund.website }}</span>{% endif %}
     </div>
   </section>
 

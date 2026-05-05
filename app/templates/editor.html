@@ -70,13 +70,19 @@
 
     <div class="q">
       <label for="city_ua" class="q-label">Звідки дитина?</label>
-      <input type="text" id="city_ua" class="big-input" placeholder="Наприклад: Львів" autocomplete="off">
+      <div class="autocomplete">
+        <input type="text" id="city_ua" class="big-input" placeholder="Наприклад: Львів" autocomplete="off">
+        <div class="autocomplete-list" id="city-suggest"></div>
+      </div>
       <div class="hint-translated" id="hint-city"></div>
     </div>
 
     <div class="q">
       <label for="region_ua" class="q-label">Область <span class="q-opt">(необов'язково)</span></label>
-      <input type="text" id="region_ua" class="big-input" placeholder="Наприклад: Львівська область" autocomplete="off">
+      <div class="autocomplete">
+        <input type="text" id="region_ua" class="big-input" placeholder="Наприклад: Львівська область" autocomplete="off">
+        <div class="autocomplete-list" id="region-suggest"></div>
+      </div>
       <div class="hint-translated" id="hint-region"></div>
     </div>
 
@@ -200,11 +206,15 @@
   <!-- ========== STEP 3 ========== -->
   <section class="page" data-step="3">
     <h1>Що потрібно щомісяця?</h1>
-    <p class="page-hint">Від 1 до 5 пунктів. Наприклад: сенсори, пластирі, голки.</p>
+    <p class="page-hint">До 3 пунктів. Заповніть вручну або скористайтесь швидкими варіантами нижче.</p>
 
     <div class="q">
+      <span class="q-label">Список потреб</span>
       <div id="items-list" class="items"></div>
-      <button type="button" id="btn-add-item" class="btn-add">+ Додати пункт</button>
+
+      <hr class="presets-divider">
+
+      <button type="button" id="btn-add-item" class="btn-add">+ пункт</button>
     </div>
 
     <div class="q">
@@ -306,7 +316,11 @@
 <template id="item-row-template">
   <div class="item-row">
     <div class="item-num"></div>
-    <input type="text" class="item-ua big-input" placeholder="Наприклад: FreeStyle Libre 3 — сенсори, 2 шт">
+    <input type="text" class="item-ua big-input" placeholder="Наприклад: FreeStyle Libre 3">
+    <div class="item-count-wrap">
+      <input type="number" class="item-count" min="1" step="1" placeholder="2" inputmode="numeric">
+      <span class="item-count-unit">шт</span>
+    </div>
     <div class="item-price-wrap">
       <input type="number" class="item-price" min="0" step="5" placeholder="0" inputmode="numeric">
       <span class="item-price-unit">€</span>
@@ -318,6 +332,10 @@
 <!-- Toast -->
 <div id="toast" class="toast"></div>
 
+<script>
+window.PRESETS = {{ presets|tojson }};
+window.LOCATIONS = {{ locations|tojson }};
+</script>
 <script src="{{ url_for('static', filename='editor.js') }}"></script>
 </body>
 </html>

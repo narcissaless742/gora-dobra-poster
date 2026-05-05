@@ -25,6 +25,7 @@ const state = {
   gender: 'f',
   amount: 0,
   amountManual: false,
+  ref_id: '',
   brand: {},
 };
 
@@ -47,6 +48,17 @@ async function translate(text) {
     console.error(e);
     return '';
   }
+}
+
+/* Look up translation in a local dictionary first, fall back to /api/translate */
+async function resolveTranslation(text, dictionary) {
+  const s = (text || '').trim();
+  if (!s) return '';
+  const list = dictionary || [];
+  const lower = s.toLowerCase();
+  const found = list.find(x => (x.ua || '').toLowerCase() === lower);
+  if (found && found.de) return found.de;
+  return await translate(s);
 }
 
 /* Debounce helper */
@@ -108,7 +120,7 @@ cityInput.addEventListener('input', (e) => { state.city_ua = e.target.value; });
 cityInput.addEventListener('blur', async () => {
   if (!state.city_ua.trim()) { setHint(hintCity, ''); state.city_de = ''; return; }
   setHint(hintCity, '…');
-  const t = await translate(state.city_ua);
+  const t = await resolveTranslation(state.city_ua, (window.LOCATIONS || {}).cities);
   state.city_de = t;
   setHint(hintCity, t);
 });
@@ -117,7 +129,7 @@ regionInput.addEventListener('input', (e) => { state.region_ua = e.target.value;
 regionInput.addEventListener('blur', async () => {
   if (!state.region_ua.trim()) { setHint(hintRegion, ''); state.region_de = ''; return; }
   setHint(hintRegion, '…');
-  const t = await translate(state.region_ua);
+  const t = await resolveTranslation(state.region_ua, (window.LOCATIONS || {}).regions);
   state.region_de = t;
   setHint(hintRegion, t);
 });
@@ -212,6 +224,7 @@ function renderItems() {
 
     const ua = node.querySelector('.item-ua');
     ua.value = it.ua;
+    ua.addEventListener('focus', (e) => e.target.select());
     ua.addEventListener('input', (e) => { state.items[idx].ua = e.target.value; });
     ua.addEventListener('blur', async () => {
       const src = (state.items[idx].ua || '').trim();
@@ -220,8 +233,16 @@ function renderItems() {
       if (t) state.items[idx].de = t;
     });
 
+    const cnt = node.querySelector('.item-count');
+    cnt.value = it.count !== undefined && it.count !== '' ? it.count : '';
+    cnt.addEventListener('focus', (e) => e.target.select());
+    cnt.addEventListener('input', (e) => {
+      state.items[idx].count = e.target.value;
+    });
+
     const pr = node.querySelector('.item-price');
     pr.value = it.price !== undefined && it.price !== '' ? it.price : '';
+    pr.addEventListener('focus', (e) => e.target.select());
     pr.addEventListener('input', (e) => {
       state.items[idx].price = e.target.value;
       recomputeTotal();
@@ -229,21 +250,186 @@ function renderItems() {
 
     node.querySelector('.item-remove').addEventListener('click', () => {
       state.items.splice(idx, 1);
+      if (state.items.length === 0) {
+        state.items.push({ ua: '', de: '', count: '', price: '' });
+      }
       renderItems();
       recomputeTotal();
     });
     itemsList.appendChild(node);
+
+    // Frame is shown only under the LAST (active) item
+    if (idx === state.items.length - 1) {
+      itemsList.appendChild(buildPresetsFrame(idx));
+    }
   });
   btnAddItem.disabled = state.items.length >= 3;
 }
 
 btnAddItem.addEventListener('click', () => {
   if (state.items.length >= 3) return;
-  state.items.push({ ua: '', de: '', price: '' });
+  state.items.push({ ua: '', de: '', count: '', price: '' });
   renderItems();
   const rows = itemsList.querySelectorAll('.item-ua');
   if (rows.length) rows[rows.length - 1].focus();
 });
+
+/* ===== presets — frame attached to the active (last) item ===== */
+function buildPresetChip(item, targetIdx) {
+  const chip = document.createElement('button');
+  chip.type = 'button';
+  chip.className = 'preset-chip';
+  chip.textContent = item.ua || '';
+  chip.addEventListener('click', (e) => {
+    e.preventDefault();
+    applyPresetToItem(targetIdx, item);
+  });
+  return chip;
+}
+
+function buildPresetsFrame(targetIdx) {
+  const frame = document.createElement('div');
+  frame.className = 'item-presets-frame';
+
+  const label = document.createElement('div');
+  label.className = 'item-presets-label';
+  label.textContent = 'Швидкий вибір';
+  frame.appendChild(label);
+
+  const data = window.PRESETS || {};
+
+  // Quick chips row
+  const quickRow = document.createElement('div');
+  quickRow.className = 'presets-chips presets-quick-row';
+  (data.quick || []).forEach(item => {
+    quickRow.appendChild(buildPresetChip(item, targetIdx));
+  });
+  frame.appendChild(quickRow);
+
+  // Three dropdown menus in a row
+  const menusRow = document.createElement('div');
+  menusRow.className = 'presets-menus presets-menus-row';
+  (data.groups || []).forEach(group => {
+    const det = document.createElement('details');
+    det.className = 'preset-menu';
+
+    const sum = document.createElement('summary');
+    sum.className = 'preset-menu-summary';
+    sum.textContent = group.title_ua || '';
+    det.appendChild(sum);
+
+    const chips = document.createElement('div');
+    chips.className = 'presets-chips preset-menu-chips';
+    (group.items || []).forEach(item => {
+      chips.appendChild(buildPresetChip(item, targetIdx));
+    });
+    det.appendChild(chips);
+
+    menusRow.appendChild(det);
+  });
+  frame.appendChild(menusRow);
+
+  return frame;
+}
+
+function applyPresetToItem(idx, preset) {
+  if (idx < 0 || idx >= state.items.length) return;
+  state.items[idx] = {
+    ua: preset.ua || '',
+    de: preset.de || '',
+    count: preset.count ?? '',
+    price: preset.price ?? '',
+  };
+  renderItems();
+  recomputeTotal();
+}
+
+/* ===== custom autocomplete (cities & regions) ===== */
+function setupAutocomplete(input, listEl, getList) {
+  if (!input || !listEl) return;
+  let activeIdx = -1;
+  let lastMatches = [];
+
+  function getMatches() {
+    const q = (input.value || '').trim().toLowerCase();
+    const all = (getList() || []);
+    if (!q) return all.slice(0, 60);
+    const starts = [];
+    const contains = [];
+    for (const x of all) {
+      const ua = (x.ua || '').toLowerCase();
+      if (!ua) continue;
+      if (ua.startsWith(q)) starts.push(x);
+      else if (ua.includes(q)) contains.push(x);
+    }
+    return starts.concat(contains).slice(0, 60);
+  }
+
+  function render() {
+    lastMatches = getMatches();
+    if (!lastMatches.length) { listEl.classList.remove('open'); listEl.innerHTML = ''; return; }
+    listEl.innerHTML = '';
+    lastMatches.forEach((m, i) => {
+      const opt = document.createElement('div');
+      opt.className = 'autocomplete-option' + (i === activeIdx ? ' active' : '');
+      opt.textContent = m.ua;
+      opt.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        pick(m);
+      });
+      listEl.appendChild(opt);
+    });
+    listEl.classList.add('open');
+  }
+
+  function pick(item) {
+    input.value = item.ua;
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    listEl.classList.remove('open');
+    input.dispatchEvent(new Event('blur'));
+  }
+
+  input.addEventListener('focus', () => { activeIdx = -1; render(); });
+  input.addEventListener('input', () => { activeIdx = -1; render(); });
+  input.addEventListener('keydown', (e) => {
+    if (!listEl.classList.contains('open') && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+      render();
+      return;
+    }
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      activeIdx = Math.min(lastMatches.length - 1, activeIdx + 1);
+      render();
+      scrollActiveIntoView();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      activeIdx = Math.max(-1, activeIdx - 1);
+      render();
+      scrollActiveIntoView();
+    } else if (e.key === 'Enter') {
+      if (activeIdx >= 0 && lastMatches[activeIdx]) {
+        e.preventDefault();
+        pick(lastMatches[activeIdx]);
+      }
+    } else if (e.key === 'Escape') {
+      listEl.classList.remove('open');
+    }
+  });
+  input.addEventListener('blur', () => {
+    setTimeout(() => listEl.classList.remove('open'), 120);
+  });
+
+  function scrollActiveIntoView() {
+    const el = listEl.querySelector('.autocomplete-option.active');
+    if (el) el.scrollIntoView({ block: 'nearest' });
+  }
+}
+
+function initAutocompletes() {
+  const loc = window.LOCATIONS || {};
+  setupAutocomplete(cityInput,   $('#city-suggest'),   () => loc.cities);
+  setupAutocomplete(regionInput, $('#region-suggest'), () => loc.regions);
+}
 
 /* ===== amount: auto-sum with manual override ===== */
 const btnResetAmount = $('#btn-reset-amount');
@@ -328,10 +514,11 @@ function collectPayload() {
     story_de: state.story_de,
     items: state.items
       .filter(i => (i.ua || '').trim())
-      .map(i => ({ ua: i.ua, de: i.de, price: i.price })),
+      .map(i => ({ ua: i.ua, de: i.de, count: i.count, price: i.price })),
     age: state.age,
     gender: state.gender,
     amount: state.amount,
+    ref_id: state.ref_id,
   };
 }
 
@@ -365,6 +552,11 @@ btnPdf.addEventListener('click', async () => {
       body: JSON.stringify(collectPayload()),
     });
     if (!res.ok) throw new Error('Generate failed');
+    const refId = res.headers.get('X-Ref-Id');
+    if (refId) {
+      state.ref_id = refId;
+      runPreview();
+    }
     const blob = await res.blob();
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -394,6 +586,7 @@ btnNew.addEventListener('click', () => {
   state.items = [];
   state.age = 8; state.gender = 'f';
   state.amount = 0; state.amountManual = false;
+  state.ref_id = '';
   nameInput.value = ''; cityInput.value = ''; regionInput.value = '';
   storyUa.value = ''; storyDe.value = '';
   ageInput.value = '8';
@@ -523,6 +716,11 @@ async function downloadBlob(url, payload, defaultName, btnEl) {
       body: JSON.stringify(payload),
     });
     if (!res.ok) throw new Error('Помилка сервера');
+    const refId = res.headers.get('X-Ref-Id');
+    if (refId) {
+      state.ref_id = refId;
+      runPreview();
+    }
     const blob = await res.blob();
     const objUrl = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -556,14 +754,12 @@ $('#btn-all').addEventListener('click', () =>
    INITIAL
    ================================ */
 function seedDefaultItems() {
-  state.items = [
-    { ua: 'FreeStyle Libre 3 — сенсори, 2 шт', de: 'FreeStyle Libre 3 Sensoren, 2 Stk.', price: 65 },
-    { ua: 'Пластирі-фіксатори', de: 'Fixierpflaster', price: 20 },
-  ];
+  state.items = [{ ua: '', de: '', count: '', price: '' }];
 }
 
 seedDefaultItems();
 renderItems();
+initAutocompletes();
 updateGenderPreviews();
 setAmountMode(false);
 recomputeTotal();

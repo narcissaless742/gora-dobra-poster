@@ -7,11 +7,13 @@ Flask app for Gora Dobra patronage poster generator.
 - Live preview + PDF download
 - Social media PNG exports (Story 1080x1920, Post1/Post2 1080x1080)
 """
-from pathlib import Path
 import io
 import json
+import platform
+import re
 import uuid
 import zipfile
+from pathlib import Path
 
 from flask import Flask, render_template, request, jsonify, send_file, abort, Response
 from jinja2 import Environment, FileSystemLoader
@@ -19,11 +21,49 @@ from playwright.sync_api import sync_playwright
 from deep_translator import GoogleTranslator
 
 
+_LAUNCH_KWARGS_CACHE: dict | None = None
+
+
+def _playwright_launch_kwargs() -> dict:
+    """Workaround: on some Windows installs Playwright reports its default
+    chromium binary as missing even though chrome-headless-shell.exe is on disk
+    and runnable. We resolve the version Playwright itself expects (via its
+    default executable_path) and point launch() at the matching headless-shell.
+    On Linux (Render) this returns {} -> default."""
+    global _LAUNCH_KWARGS_CACHE
+    if _LAUNCH_KWARGS_CACHE is not None:
+        return _LAUNCH_KWARGS_CACHE
+    if platform.system() != "Windows":
+        _LAUNCH_KWARGS_CACHE = {}
+        return _LAUNCH_KWARGS_CACHE
+
+    import re
+    try:
+        with sync_playwright() as p:
+            default_exe = p.chromium.executable_path
+        m = re.search(r"chromium-(\d+)", default_exe)
+        if m:
+            version = m.group(1)
+            base = Path.home() / "AppData" / "Local" / "ms-playwright"
+            exe = base / f"chromium_headless_shell-{version}" / "chrome-headless-shell-win64" / "chrome-headless-shell.exe"
+            if exe.is_file():
+                _LAUNCH_KWARGS_CACHE = {"executable_path": str(exe)}
+                return _LAUNCH_KWARGS_CACHE
+    except Exception:
+        pass
+
+    _LAUNCH_KWARGS_CACHE = {}
+    return _LAUNCH_KWARGS_CACHE
+
+
 ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = ROOT / "template"
 ASSETS_DIR = TEMPLATE_DIR / "assets"
 OUTPUT_DIR = ROOT / "output"
 FUND_CONFIG = ROOT / "config" / "fund.json"
+PRESETS_CONFIG = ROOT / "config" / "presets.json"
+LOCATIONS_CONFIG = ROOT / "config" / "locations.json"
+COUNTER_FILE = ROOT / "data" / "counter.json"
 
 FUND_DEFAULTS = {
     "cta_ua":      "Станьте патроном цієї дитини",
@@ -46,6 +86,24 @@ def load_fund():
     for k, v in FUND_DEFAULTS.items():
         data.setdefault(k, v)
     return data
+
+
+def load_presets():
+    if PRESETS_CONFIG.exists():
+        try:
+            return json.loads(PRESETS_CONFIG.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            pass
+    return {"groups": []}
+
+
+def load_locations():
+    if LOCATIONS_CONFIG.exists():
+        try:
+            return json.loads(LOCATIONS_CONFIG.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            pass
+    return {"regions": [], "cities": []}
 
 
 app = Flask(
@@ -95,19 +153,111 @@ def get_partner_logos() -> list | None:
     return logos if logos else None
 
 
+def _format_id_n(n: int) -> str:
+    """Convert a 1-based counter value into a 4-char ID: <letter><3 digits>.
+    n=1 -> A001, n=999 -> A999, n=1000 -> B001, ..., n=25974 -> Z999."""
+    if n < 1:
+        n = 1
+    n0 = n - 1
+    letter_idx = n0 // 999
+    digit = (n0 % 999) + 1
+    if letter_idx > 25:
+        # Counter overflow past Z999 — clamp to Z999 (warn elsewhere if needed).
+        letter_idx = 25
+        digit = 999
+    return f"{chr(ord('A') + letter_idx)}{digit:03d}"
+
+
+_REF_ID_RE = re.compile(r"^[A-Z]\d{3}$")
+
+
 def _fmt_id(raw) -> str:
-    s = str(raw or "").strip()
+    s = str(raw or "").strip().upper()
     if not s:
-        return "0001"
-    return s.zfill(4) if s.isdigit() else s
+        return _format_id_n(1)
+    if _REF_ID_RE.match(s):
+        return s
+    if s.isdigit():
+        return _format_id_n(int(s))
+    return s
 
 
-def build_context(data: dict) -> dict:
+_UA_TRANSLIT = {
+    "а": "a", "б": "b", "в": "v", "г": "h", "ґ": "g",
+    "д": "d", "е": "e", "є": "ie", "ж": "zh", "з": "z",
+    "и": "y", "і": "i", "ї": "i", "й": "i", "к": "k",
+    "л": "l", "м": "m", "н": "n", "о": "o", "п": "p",
+    "р": "r", "с": "s", "т": "t", "у": "u", "ф": "f",
+    "х": "kh", "ц": "ts", "ч": "ch", "ш": "sh", "щ": "shch",
+    "ь": "", "ю": "iu", "я": "ia", "'": "", "ʼ": "", "’": "",
+}
+
+
+def _translit_ua(text: str) -> str:
+    out = []
+    for ch in text:
+        lo = ch.lower()
+        if lo in _UA_TRANSLIT:
+            t = _UA_TRANSLIT[lo]
+            out.append(t.title() if ch.isupper() else t)
+        else:
+            out.append(ch)
+    return "".join(out)
+
+
+def _file_basename(name_de: str, name_ua: str, ref_id: str) -> str:
+    """Build a filesystem-safe file basename: '<Name>_<ID>'.
+    Prefers name_de (already latinized via translation); falls back to a
+    transliteration of name_ua; then to 'poster'."""
+    raw = (name_de or "").strip() or _translit_ua((name_ua or "").strip())
+    cleaned = re.sub(r'[\\/:*?"<>|]+', "", raw)
+    cleaned = re.sub(r"\s+", "_", cleaned).strip("_")
+    cleaned = cleaned[:40] or "poster"
+    return f"{cleaned}_{ref_id}"
+
+
+def _read_counter() -> int:
+    try:
+        if COUNTER_FILE.exists():
+            data = json.loads(COUNTER_FILE.read_text(encoding="utf-8"))
+            n = int(data.get("next_id", 1))
+            return n if n >= 1 else 1
+    except (json.JSONDecodeError, ValueError, OSError):
+        pass
+    return 1
+
+
+def _write_counter(n: int) -> None:
+    COUNTER_FILE.parent.mkdir(parents=True, exist_ok=True)
+    COUNTER_FILE.write_text(
+        json.dumps({"next_id": n}, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+
+
+def reserve_next_id() -> str:
+    n = _read_counter()
+    _write_counter(n + 1)
+    return _format_id_n(n)
+
+
+def peek_next_id() -> str:
+    return _format_id_n(_read_counter())
+
+
+def resolve_ref_id(data: dict, *, allow_reserve: bool) -> str:
+    raw = (data.get("ref_id") or "").strip()
+    if raw:
+        return _fmt_id(raw)
+    return reserve_next_id() if allow_reserve else peek_next_id()
+
+
+def build_context(data: dict, *, allow_reserve: bool = False) -> dict:
     age = int(data.get("age") or 0)
     bucket = age_bucket(age)
     gender = data.get("gender", "m")
     return {
-        "ref_id":      _fmt_id(data.get("ref_id")),
+        "ref_id":      resolve_ref_id(data, allow_reserve=allow_reserve),
         "name_ua":     data.get("name_ua", "").strip(),
         "name_de":     data.get("name_de", "").strip(),
         "age":         age,
@@ -123,6 +273,7 @@ def build_context(data: dict) -> dict:
             {
                 "ua":    i.get("ua", "").strip(),
                 "de":    i.get("de", "").strip(),
+                "count": str(i.get("count", "")).strip(),
                 "price": str(i.get("price", "")).strip(),
             }
             for i in (data.get("items") or [])
@@ -224,7 +375,11 @@ def _screenshot_page(browser, html: str, tmp_path: Path, width: int, height: int
 
 @app.route("/")
 def index():
-    return render_template("editor.html")
+    return render_template(
+        "editor.html",
+        presets=load_presets(),
+        locations=load_locations(),
+    )
 
 
 @app.route("/api/translate", methods=["POST"])
@@ -259,18 +414,19 @@ def template_files(filename):
 @app.route("/api/generate", methods=["POST"])
 def api_generate():
     data = request.get_json() or {}
-    ctx = build_context(data)
+    ctx = build_context(data, allow_reserve=True)
     html = render_poster_html(ctx, inject_base=False)
 
     render_tmp = TEMPLATE_DIR / "_render.html"
     render_tmp.write_text(html, encoding="utf-8")
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    out_path = OUTPUT_DIR / f"{ctx['ref_id']}.pdf"
+    base = _file_basename(ctx["name_de"], ctx["name_ua"], ctx["ref_id"])
+    out_path = OUTPUT_DIR / f"{base}.pdf"
 
     try:
         with sync_playwright() as p:
-            browser = p.chromium.launch()
+            browser = p.chromium.launch(**_playwright_launch_kwargs())
             page = browser.new_page()
             page.goto(render_tmp.resolve().as_uri(), wait_until="networkidle")
             page.pdf(
@@ -283,7 +439,10 @@ def api_generate():
     finally:
         render_tmp.unlink(missing_ok=True)
 
-    return send_file(out_path, as_attachment=True, download_name=f"{ctx['ref_id']}.pdf")
+    resp = send_file(out_path, as_attachment=True, download_name=f"{base}.pdf")
+    resp.headers["X-Ref-Id"] = ctx["ref_id"]
+    resp.headers["Access-Control-Expose-Headers"] = "X-Ref-Id, Content-Disposition"
+    return resp
 
 
 @app.route("/api/preview/social/<fmt>", methods=["POST"])
@@ -309,11 +468,12 @@ def api_generate_social(fmt):
     tmp = TEMPLATE_DIR / f"_render_{fmt}.html"
 
     with sync_playwright() as p:
-        browser = p.chromium.launch()
+        browser = p.chromium.launch(**_playwright_launch_kwargs())
         png_bytes = _screenshot_page(browser, html, tmp, width, height)
         browser.close()
 
-    fname = f"{ctx['ref_id']}_{fmt}.png"
+    base = _file_basename(ctx["name_de"], ctx["name_ua"], ctx["ref_id"])
+    fname = f"{base}_{fmt}.png"
     return send_file(io.BytesIO(png_bytes), mimetype="image/png",
                      as_attachment=True, download_name=fname)
 
@@ -321,16 +481,17 @@ def api_generate_social(fmt):
 @app.route("/api/generate/all", methods=["POST"])
 def api_generate_all():
     data = request.get_json() or {}
-    ctx = build_context(data)
+    ctx = build_context(data, allow_reserve=True)
     ref = ctx["ref_id"]
+    base = _file_basename(ctx["name_de"], ctx["name_ua"], ref)
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    pdf_path = OUTPUT_DIR / f"{ref}.pdf"
+    pdf_path = OUTPUT_DIR / f"{base}.pdf"
 
     zip_buf = io.BytesIO()
 
     with sync_playwright() as p:
-        browser = p.chromium.launch()
+        browser = p.chromium.launch(**_playwright_launch_kwargs())
 
         # A4 PDF
         pdf_html = render_poster_html(ctx, inject_base=False)
@@ -355,13 +516,16 @@ def api_generate_all():
         browser.close()
 
     with zipfile.ZipFile(zip_buf, "w", zipfile.ZIP_DEFLATED) as zf:
-        zf.write(str(pdf_path), f"{ref}_A4.pdf")
+        zf.write(str(pdf_path), f"{base}_A4.pdf")
         for fmt, png_bytes in pngs.items():
-            zf.writestr(f"{ref}_{fmt}.png", png_bytes)
+            zf.writestr(f"{base}_{fmt}.png", png_bytes)
 
     zip_buf.seek(0)
-    return send_file(zip_buf, mimetype="application/zip",
-                     as_attachment=True, download_name=f"{ref}_all.zip")
+    resp = send_file(zip_buf, mimetype="application/zip",
+                     as_attachment=True, download_name=f"{base}_all.zip")
+    resp.headers["X-Ref-Id"] = ref
+    resp.headers["Access-Control-Expose-Headers"] = "X-Ref-Id, Content-Disposition"
+    return resp
 
 
 # ---------- brand settings ----------
@@ -406,4 +570,4 @@ def api_upload_partner(slot):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5000, use_reloader=False)

@@ -1,0 +1,44 @@
+{
+  "quick": [
+    {"ua": "FreeStyle Libre 2", "de": "FreeStyle Libre 2", "count": 2, "price": 60},
+    {"ua": "Linx", "de": "Linx", "count": 2, "price": 60},
+    {"ua": "Medtronic Guardian", "de": "Medtronic Guardian", "count": 2, "price": 70}
+  ],
+  "groups": [
+    {
+      "key": "cgm",
+      "title_ua": "CGM",
+      "title_de": "CGM",
+      "items": [
+        {"ua": "FreeStyle Libre 3", "de": "FreeStyle Libre 3", "count": 2, "price": 65},
+        {"ua": "Dexcom G6", "de": "Dexcom G6", "count": 3, "price": 90},
+        {"ua": "Dexcom G7", "de": "Dexcom G7", "count": 3, "price": 100},
+        {"ua": "Eversense E3", "de": "Eversense E3", "count": 1, "price": 100},
+        {"ua": "Sibionics GS-3", "de": "Sibionics GS-3", "count": 2, "price": 70}
+      ]
+    },
+    {
+      "key": "needles",
+      "title_ua": "Голки",
+      "title_de": "Pen-Nadeln",
+      "items": [
+        {"ua": "Голки 4 мм", "de": "Pen-Nadeln 4 mm", "count": 100, "price": 15},
+        {"ua": "Голки 5 мм", "de": "Pen-Nadeln 5 mm", "count": 100, "price": 14},
+        {"ua": "Голки 6 мм", "de": "Pen-Nadeln 6 mm", "count": 100, "price": 13},
+        {"ua": "Голки 8 мм", "de": "Pen-Nadeln 8 mm", "count": 100, "price": 12},
+        {"ua": "Голки 12 мм", "de": "Pen-Nadeln 12 mm", "count": 100, "price": 11}
+      ]
+    },
+    {
+      "key": "other",
+      "title_ua": "Інше",
+      "title_de": "Sonstiges",
+      "items": [
+        {"ua": "Пластирі-фіксатори", "de": "Fixierpflaster", "count": 30, "price": 20},
+        {"ua": "Тест-смужки", "de": "Teststreifen", "count": 50, "price": 25},
+        {"ua": "Ланцети", "de": "Lanzetten", "count": 100, "price": 6},
+        {"ua": "Спиртові серветки", "de": "Alkoholtupfer", "count": 100, "price": 7}
+      ]
+    }
+  ]
+}
