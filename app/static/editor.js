@@ -85,6 +85,7 @@ function toast(msg, ms = 2200) {
 const nameInput   = $('#name_ua');
 const cityInput   = $('#city_ua');
 const regionInput = $('#region_ua');
+const refIdInput  = $('#ref_id');
 const hintName   = $('#hint-name');
 const hintCity   = $('#hint-city');
 const hintRegion = $('#hint-region');
@@ -105,6 +106,26 @@ function updateGenderPreviews() {
 function setHint(el, translated) {
   if (!translated) { el.innerHTML = ''; return; }
   el.innerHTML = `<span>🌐 Німецькою: <b>${translated}</b></span>`;
+}
+
+refIdInput.addEventListener('input', (e) => {
+  const v = e.target.value.trim().toUpperCase();
+  e.target.value = v;
+  state.ref_id = v;
+});
+
+async function fetchNextId() {
+  try {
+    const res = await fetch('/api/next-id');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.ref_id && !state.ref_id) {
+      state.ref_id = data.ref_id;
+      refIdInput.value = data.ref_id;
+    }
+  } catch (e) {
+    console.warn('Could not fetch next ID:', e);
+  }
 }
 
 nameInput.addEventListener('input', (e) => { state.name_ua = e.target.value; });
@@ -555,6 +576,7 @@ btnPdf.addEventListener('click', async () => {
     const refId = res.headers.get('X-Ref-Id');
     if (refId) {
       state.ref_id = refId;
+      refIdInput.value = refId;
       runPreview();
     }
     const blob = await res.blob();
@@ -587,6 +609,7 @@ btnNew.addEventListener('click', () => {
   state.age = 8; state.gender = 'f';
   state.amount = 0; state.amountManual = false;
   state.ref_id = '';
+  refIdInput.value = '';
   nameInput.value = ''; cityInput.value = ''; regionInput.value = '';
   storyUa.value = ''; storyDe.value = '';
   ageInput.value = '8';
@@ -597,6 +620,7 @@ btnNew.addEventListener('click', () => {
   updateGenderPreviews();
   setAmountMode(false);
   recomputeTotal();
+  fetchNextId();
   goTo(1);
 });
 
@@ -719,6 +743,7 @@ async function downloadBlob(url, payload, defaultName, btnEl) {
     const refId = res.headers.get('X-Ref-Id');
     if (refId) {
       state.ref_id = refId;
+      refIdInput.value = refId;
       runPreview();
     }
     const blob = await res.blob();
@@ -764,3 +789,4 @@ updateGenderPreviews();
 setAmountMode(false);
 recomputeTotal();
 loadBrandSettings();
+fetchNextId();

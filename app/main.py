@@ -530,6 +530,11 @@ def api_generate_all():
 
 # ---------- brand settings ----------
 
+@app.route("/api/next-id", methods=["GET"])
+def api_next_id():
+    return jsonify({"ref_id": peek_next_id()})
+
+
 @app.route("/api/brand", methods=["GET"])
 def api_brand_get():
     return jsonify(load_fund())
